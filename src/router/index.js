@@ -64,6 +64,59 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+      path: '/business',
+      component: Layout,
+      redirect: 'noredirect',
+      name: 'business',
+      meta: {
+        title: 'business',
+        icon: 'component'
+      },
+      children: [
+      { path: 'system', component: _import('business/system'), name: 'system', meta: { title: 'system' }},
+        { path: 'banner', component: _import('business/banner'), name: 'banner', meta: { title: 'banner' }},
+        { path: 'advertising', component: _import('business/advertising'), name: 'advertising', meta: { title: 'advertising' }},
+        { path: 'push', component: _import('business/push'), name: 'push', meta: { title: 'push' }},
+        { path: 'recommend-analysts', component: _import('business/recommend-analysts'), name: 'recommendAnalysts', meta: { title: 'recommendAnalysts' }},
+      ]
+    },
+    {
+      path: '/users',
+      component: Layout,
+      redirect: 'noredirect',
+      name: 'users',
+      meta: {
+        title: 'users',
+        icon: 'peoples'
+      },
+      children: [
+        { path: 'userList', component: _import('users/userList'), name: 'userList', meta: { title: 'userList' }},
+        { path: 'analysts', component: _import('users/analysts'), name: 'analysts', meta: { title: 'analysts' }},
+        { path: 'analystApplication', component: _import('users/analystApplication'), name: 'analystApplication', meta: { title: 'analystApplication' }},
+      ]
+    },
+    {
+      path: '/trading',
+      component: Layout,
+      redirect: 'noredirect',
+      name: 'trading',
+      meta: {
+        title: 'trading',
+        icon: 'money'
+      },
+      children: [
+        { path: 'recharge', component: _import('trading/recharge'), name: 'recharge', meta: { title: 'recharge' }},
+        { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: 'purchaseRecords', meta: { title: 'purchaseRecords' }},
+        { path: 'analystBilling', component: _import('trading/analystBilling'), name: 'analystBilling', meta: { title: 'analystBilling' }},
+        { path: 'analystShare', component: _import('trading/analystShare'), name: 'analystShare', meta: { title: 'analystShare' }},
+        { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: 'analystIntegration', meta: { title: 'analystIntegration' }},
+
+        
+      ]
+    },
+
+
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',

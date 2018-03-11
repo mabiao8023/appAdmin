@@ -6,8 +6,12 @@
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">New Visits</div>
+          <div class="card-panel-text">今日新增用户</div>
           <count-to class="card-panel-num" :startVal="0" :endVal="102400" :duration="2600"></count-to>
+          <div class="total-title">
+          总：
+            <count-to class="card-panel-num" :startVal="0" :endVal="81212" :duration="3000"></count-to>
+          </div>
         </div>
       </div>
     </el-col>
@@ -17,8 +21,12 @@
           <svg-icon icon-class="message" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Messages</div>
+          <div class="card-panel-text">今日发单数</div>
           <count-to class="card-panel-num" :startVal="0" :endVal="81212" :duration="3000"></count-to>
+          <div class="total-title">
+          总：
+            <count-to class="card-panel-num" :startVal="0" :endVal="81212" :duration="3000"></count-to>
+          </div>
         </div>
       </div>
     </el-col>
@@ -28,8 +36,12 @@
           <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Purchases</div>
+          <div class="card-panel-text">今日购买收入</div>
           <count-to class="card-panel-num" :startVal="0" :endVal="9280" :duration="3200"></count-to>
+          <div class="total-title">
+          总：
+            <count-to class="card-panel-num" :startVal="0" :endVal="81212" :duration="3000"></count-to>
+          </div>
         </div>
       </div>
     </el-col>
@@ -39,8 +51,12 @@
           <svg-icon icon-class="shoppingCard" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Shoppings</div>
+          <div class="card-panel-text">今日充值收入</div>
           <count-to class="card-panel-num" :startVal="0" :endVal="13600" :duration="3600"></count-to>
+          <div class="total-title">
+          总：
+            <count-to class="card-panel-num" :startVal="0" :endVal="81212" :duration="3000"></count-to>
+          </div>
         </div>
       </div>
     </el-col>
@@ -127,12 +143,17 @@ export default {
         line-height: 18px;
         color: rgba(0, 0, 0, 0.45);
         font-size: 16px;
-        margin-bottom: 12px;
+        margin-bottom: 6px;
       }
       .card-panel-num {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
+  }
+  .total-title{
+    font-size: 18px;
+    color: red;
+    margin-top: 6px;
   }
 }
 </style>

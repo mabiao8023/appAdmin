@@ -1,7 +1,10 @@
 <template>
   <div class="menu-wrapper">
+    <div class="title">
+        球稳后台管理系统
+    </div>
     <template v-for="item in routes" v-if="!item.hidden&&item.children">
-
+      
       <router-link v-if="item.children.length===1 && !item.children[0].children&&!item.alwaysShow" :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
         <el-menu-item :index="item.path+'/'+item.children[0].path" :class="{'submenu-title-noDropdown':!isNest}">
           <svg-icon v-if="item.children[0].meta&&item.children[0].meta.icon" :icon-class="item.children[0].meta.icon"></svg-icon>
@@ -50,4 +53,11 @@ export default {
   }
 }
 </script>
-
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .title{
+      color:#fff;
+      text-align: center;
+      padding: 20px 0;
+      background: #409EFF;
+  }
+</style>

@@ -1,8 +1,21 @@
 export default {
   route: {
-    dashboard: 'Dashboard',
+    business:'业务配置',
+    system:'系统配置',
+    banner:'轮播图',
+    advertising:'广告位',
+    push:'推送',
+    recommendAnalysts:'首页分析师推荐',
+    users:'用户管理',
+    userList:'用户列表',
+    analysts:'分析师列表',
+    analystApplication:'分析师申请',
+    trading:'交易记录',
+
+
+    dashboard: '图形数据',
     introduction: 'Introduction',
-    documentation: 'Documentation',
+    documentation: '操作文档',
     permission: 'Permission',
     icons: 'Icons',
     components: 'Components',

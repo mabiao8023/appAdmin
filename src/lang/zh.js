@@ -1,9 +1,28 @@
 export default {
   route: {
-    dashboard: '首页',
+    business:'业务配置',
+    system:'系统配置',
+    banner:'首页轮播图',
+    advertising:'全部广告位',
+    push:'推送',
+    recommendAnalysts:'首页分析师推荐',
+
+    users:'用户管理',
+    userList:'用户列表',
+    analysts:'分析师列表',
+    analystApplication:'分析师申请',
+    trading:'交易管理',
+    recharge:'充值记录',
+    purchaseRecords:'购买记录',
+    analystBilling:'分析师发单记录',
+    analystShare:'分析师分成记录',
+    analystIntegration: '分析师积分记录',
+
+
+    dashboard: '图形数据',
     introduction: '简述',
-    documentation: '文档',
-    permission: '权限测试页',
+    documentation: '操作文档',
+    permission: '权限管理（待开放）',
     icons: '图标',
     components: '组件',
     componentIndex: '介绍',

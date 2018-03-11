@@ -1,0 +1,1 @@
+analystIntegration.vue
