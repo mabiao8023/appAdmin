@@ -73,7 +73,8 @@ export const asyncRouterMap = [
         icon: 'component'
       },
       children: [
-      { path: 'system', component: _import('business/system'), name: 'system', meta: { title: 'system' }},
+        { path: 'system', component: _import('business/system'), name: 'system', meta: { title: 'system' }},
+        { path: 'entry', component: _import('business/entry'), name: 'entry', meta: { title: 'entry' }},
         { path: 'banner', component: _import('business/banner'), name: 'banner', meta: { title: 'banner' }},
         { path: 'advertising', component: _import('business/advertising'), name: 'advertising', meta: { title: 'advertising' }},
         { path: 'push', component: _import('business/push'), name: 'push', meta: { title: 'push' }},

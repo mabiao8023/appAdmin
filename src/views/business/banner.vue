@@ -216,6 +216,8 @@ export default {
     this.getList()
   },
   methods: {
+
+  	// 获得全部的列表
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
@@ -224,18 +226,26 @@ export default {
         this.listLoading = false
       })
     },
+
+    // 页码过滤
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
+
+    // 数量限制搜索
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
     },
+
+    // 根据页面搜索
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
     },
+
+    // 修改当前行的状态
     handleModifyStatus(row, status) {
       this.$message({
         message: '操作成功',
@@ -243,6 +253,7 @@ export default {
       })
       row.status = status
     },
+
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -254,6 +265,8 @@ export default {
         type: ''
       }
     },
+
+    // 新增数据初始化
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -262,6 +275,8 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+
+    // 新增数据
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -280,6 +295,8 @@ export default {
         }
       })
     },
+
+    // 设置当前编辑窗口
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -289,6 +306,8 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+
+  	// 模拟更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -313,6 +332,8 @@ export default {
         }
       })
     },
+
+    // 删除列表
     handleDelete(row) {
       this.$notify({
         title: '成功',
@@ -323,12 +344,15 @@ export default {
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
     },
+
+    // 获得各渠道下的浏览数
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
         this.pvData = response.data.pvData
         this.dialogPvVisible = true
       })
     },
+    // 下载exele
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
@@ -339,6 +363,7 @@ export default {
         this.downloadLoading = false
       })
     },
+    // 格式化Json
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

@@ -2,10 +2,12 @@ export default {
   route: {
     business:'业务配置',
     system:'系统配置',
+    entry:'启动页配置',
     banner:'首页轮播图',
     advertising:'全部广告位',
     push:'推送',
     recommendAnalysts:'首页分析师推荐',
+
 
     users:'用户管理',
     userList:'用户列表',
