@@ -1,115 +1,99 @@
 <template>
   <div class="app-container calendar-list-container">
+    <!-- banner配置规则 -->
+   
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">
-      </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">
-        </el-option>
-      </el-select>
-      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">
-        <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">
-        </el-option>
-      </el-select>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
-        </el-option>
-      </el-select>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-      <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
-      <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>
+    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增轮播图</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="$t('table.id')" width="65">
+      <el-table-column align="center" label="排序" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.id}}</span>
+          <span>{{scope.row.banner_no}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" :label="$t('table.date')">
+      <el-table-column width="150px" align="center" label="页面名称">
         <template slot-scope="scope">
-          <span>{{scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
+          <span>{{ scope.row.page_type | typeFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="$t('table.title')">
+      <el-table-column width="auto" class="img-show" align="center" label="展示图片">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.title}}</span>
-          <el-tag>{{scope.row.type | typeFilter}}</el-tag>
+          <img :src="scope.row.img_url">
         </template>
       </el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('table.author')">
+      <el-table-column width="150px" align="center" label="跳转链接">
         <template slot-scope="scope">
-          <span>{{scope.row.author}}</span>
+          <span>{{scope.row.url || '无'}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="110px" v-if='showReviewer' align="center" :label="$t('table.reviewer')">
+      <el-table-column width="150px" align="center" label="跳转参数">
         <template slot-scope="scope">
-          <span style='color:red;'>{{scope.row.reviewer}}</span>
+          <span>{{scope.row.params || '无'}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" :label="$t('table.importance')">
+      <el-table-column width="150px" align="center" label="是否可用">
         <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>
+          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.readings')" width="95">
-        <template slot-scope="scope">
-          <span v-if="scope.row.pageviews" class="link-type" @click='handleFetchPv(scope.row.pageviews)'>{{scope.row.pageviews}}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" :label="$t('table.status')" width="100">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
+     
+      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
+         <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '解冻' }}
           </el-button>
-          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}
-          </el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">{{$t('table.delete')}}
-          </el-button>
+          <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+     <div class="banner-rules">
+      <div class="title">
+          配置提示：轮播图跳转分为：普通网页和app内部跳转，参数选择参考下表  
+      </div>
+         <el-table key='1' :data="bannerRulesList"  border fit highlight-current-row style="width:500px;"
+      >
+      <el-table-column align="center" label="跳转类型" width="200">
+        <template slot-scope="scope">
+          <span> {{scope.row.title}} </span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="跳转路径" width="150">
+        <template slot-scope="scope">
+          <span> {{scope.row.url || '不填'}} </span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="跳转参数" width="auto">
+        <template slot-scope="scope">
+          <span> {{scope.row.paramsId || '不填'}} </span>
+        </template>
+      </el-table-column>
+      
+    </el-table>
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <el-form-item :label="$t('table.type')" prop="type">
-          <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
-            <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
+      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="跳转页面" prop="page_type">
+          <el-select class="filter-item" v-model="temp.page_type" placeholder="请选择跳转页面">
+            <el-option v-for="item in  gotype" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('table.date')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date">
-          </el-date-picker>
+        <el-form-item label="展示图片" prop="img_url">
+          <img :src="temp.img_url">
         </el-form-item>
-        <el-form-item :label="$t('table.title')" prop="title">
-          <el-input v-model="temp.title"></el-input>
+        <el-form-item label="跳转链接" prop="page_type">
+
+          <el-input v-if="temp.page_type == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
+          <el-input v-else disabled value="普通网页无需输入跳转链接"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select class="filter-item" v-model="temp.status" placeholder="Please select">
-            <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate style="margin-top:8px;" v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max='3'></el-rate>
-        </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="Please input" v-model="temp.remark">
-          </el-input>
+        <el-form-item label="跳转参数" prop="params">
+
+          <el-input v-if="temp.page_type != 1" placeholder="请输入参数，如：课程id，推荐单id，分析师id"  v-model="temp.params"></el-input>
+          <el-input v-else disabled value="普通网页无需输入跳转参数"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -143,9 +127,26 @@ const calendarTypeOptions = [
   { key: 'JP', display_name: 'Japan' },
   { key: 'EU', display_name: 'Eurozone' }
 ]
+// 页面跳转类型
+
+const gotype = [
+  { key: '1', display_name: '普通网页' },
+  { key: '2', display_name: '推荐单页面' },
+  { key: '3', display_name: '分析师页面' },
+  { key: '4', display_name: '课程列表页面' },
+  { key: '5', display_name: '课程购买页面' },
+  { key: '6', display_name: '视频列表页面' },
+  { key: '7', display_name: '会员升级页面' },
+  { key: '8', display_name: '绑定手机页面' },
+]
 
 // arr to obj ,such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
+/*const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})*/
+
+const goTypeKeyValue = gotype.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
   return acc
 }, {})
@@ -157,6 +158,7 @@ export default {
   },
   data() {
     return {
+      gotype,
       tableKey: 0,
       list: null,
       total: null,
@@ -186,8 +188,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: '编辑轮播图',
+        create: '新增轮播图'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -196,7 +198,25 @@ export default {
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+
+      bannerRulesList:[
+        {
+          title:'普通网页',
+          url:'www.baidu.com',
+          paramsId:'',
+        },
+        {
+          title:'推荐页面',
+          url:'',
+          paramsId:'5',
+        },
+        {
+          title:'其他',
+          url:'',
+          paramsId:'...',
+        }
+      ]
     }
   },
   filters: {
@@ -209,7 +229,7 @@ export default {
       return statusMap[status]
     },
     typeFilter(type) {
-      return calendarTypeKeyValue[type]
+      return goTypeKeyValue[type]
     }
   },
   created() {
@@ -220,11 +240,51 @@ export default {
   	// 获得全部的列表
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
+      this.listLoading = false
+      this.list = [
+        {
+          id:1,
+          banner_no:1,
+          page_type:1,
+          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+          url:'www.baidu.com',
+          params:'',
+          status:1,
+        },
+        {
+          id:2,
+          banner_no:2,
+          page_type:2,
+          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+          url:'',
+          params:2,
+          status:1,
+        },
+        {
+          id:3,
+          banner_no:3,
+          page_type:3,
+          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+          url:'',
+          params:3,
+          status:1,
+        },
+        {
+          id:4,
+          banner_no:4,
+          page_type:4,
+          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+          url:'',
+          params:4,
+          status:1,
+        }
+        
+      ]
+      // fetchList(this.listQuery).then(response => {
+      //   this.list = response.data.items
+      //   this.total = response.data.total
+      //   this.listLoading = false
+      // })
     },
 
     // 页码过滤
@@ -376,3 +436,14 @@ export default {
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .banner-rules{
+    padding: 20px 0;
+  }
+  .title{
+    padding-bottom: 20px;
+  }
+  img{
+    width: 100%;
+  }
+</style>

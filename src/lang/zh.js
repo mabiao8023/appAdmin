@@ -1,7 +1,7 @@
 export default {
   route: {
     business:'业务配置',
-    system:'系统配置',
+    system:'每日登录配置',
     userMember:'用户会员等级配置',
     analystsMember:'分析师等级配置',
     chargeConf:'用户充值配置',
