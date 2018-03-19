@@ -2,6 +2,9 @@ export default {
   route: {
     business:'业务配置',
     system:'系统配置',
+    userMember:'用户会员等级配置',
+    analystsMember:'分析师等级配置',
+    chargeConf:'用户充值配置',
     entry:'启动页配置',
     banner:'首页轮播图',
     advertising:'全部广告位',

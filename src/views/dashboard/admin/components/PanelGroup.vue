@@ -6,7 +6,7 @@
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">今日新增用户</div>
+          <div class="card-panel-text">今日新增会员</div>
           <count-to class="card-panel-num" :startVal="0" :endVal="102400" :duration="2600"></count-to>
           <div class="total-title">
           总：
@@ -36,7 +36,7 @@
           <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">今日购买收入</div>
+          <div class="card-panel-text">今日会员收入</div>
           <count-to class="card-panel-num" :startVal="0" :endVal="9280" :duration="3200"></count-to>
           <div class="total-title">
           总：

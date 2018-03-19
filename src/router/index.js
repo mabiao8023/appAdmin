@@ -74,6 +74,9 @@ export const asyncRouterMap = [
       },
       children: [
         { path: 'system', component: _import('business/system'), name: 'system', meta: { title: 'system' }},
+        { path: 'userMember', component: _import('business/userMember'), name: 'userMember', meta: { title: 'userMember' }},
+         { path: 'analystsMember', component: _import('business/analystsMember'), name: 'analystsMember', meta: { title: 'analystsMember' }},
+          { path: 'chargeConf', component: _import('business/chargeConf'), name: 'chargeConf', meta: { title: 'chargeConf' }},
         { path: 'entry', component: _import('business/entry'), name: 'entry', meta: { title: 'entry' }},
         { path: 'banner', component: _import('business/banner'), name: 'banner', meta: { title: 'banner' }},
         { path: 'advertising', component: _import('business/advertising'), name: 'advertising', meta: { title: 'advertising' }},
