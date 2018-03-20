@@ -23,6 +23,10 @@ export default {
     analystShare:'分析师分成记录',
     analystIntegration: '分析师积分记录',
 
+    video:'视频模块',
+    videoList:'视频列表',
+    videoCategory:'视频分类',
+
 
     dashboard: '图形数据',
     introduction: '简述',

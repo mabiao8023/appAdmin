@@ -1,36 +1,47 @@
+<!-- 视频列表模块 -->
 <template>
   <div class="app-container calendar-list-container">
     <!-- banner配置规则 -->
    
     <div class="filter-container">
-    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增轮播图</el-button>
+    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增视频</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="排序" width="65">
+      <el-table-column align="center" label="视频id" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.banner_no}}</span>
+          <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="页面名称">
+      <el-table-column width="150px" align="center" label="视频描述">
         <template slot-scope="scope">
-          <span>{{ scope.row.page_type | typeFilter }}</span>
+          <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="auto" class="img-show" align="center" label="展示图片">
+      <el-table-column width="auto" class="img-show" align="center" label="首屏图片">
         <template slot-scope="scope">
           <img :src="scope.row.img_url">
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转链接">
+      <el-table-column width="150px" align="center" label="视频链接">
         <template slot-scope="scope">
-          <span>{{scope.row.url || '无'}}</span>
+          <a :href="scope.row.video" target="view_window">{{scope.row.video}}</a>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转参数">
+      <el-table-column width="150px" align="center" label="视频分类">
         <template slot-scope="scope">
-          <span>{{scope.row.params || '无'}}</span>
+          <el-tag v-for="item in scope.row.categroy">{{ item.name }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column width="150px" align="center" label="上传者">
+        <template slot-scope="scope">
+          <span>{{ scope.row.user_name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="150px" align="center" label="上传时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.user_name }}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="是否可用">
@@ -48,32 +59,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-     <div class="banner-rules">
-      <div class="title">
-          配置提示：轮播图跳转分为：普通网页和app内部跳转，参数选择参考下表  
-      </div>
-         <el-table key='1' :data="bannerRulesList"  border fit highlight-current-row style="width:500px;"
-      >
-      <el-table-column align="center" label="跳转类型" width="200">
-        <template slot-scope="scope">
-          <span> {{scope.row.title}} </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="跳转路径" width="150">
-        <template slot-scope="scope">
-          <span> {{scope.row.url || '不填'}} </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="跳转参数" width="auto">
-        <template slot-scope="scope">
-          <span> {{scope.row.paramsId || '不填'}} </span>
-        </template>
-      </el-table-column>
-      
-    </el-table>
-    </div>
-
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
         <el-form-item label="跳转页面" prop="page_type">
@@ -249,38 +234,54 @@ export default {
       this.list = [
         {
           id:1,
-          banner_no:1,
-          page_type:1,
+          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
+          user_name:'天下第一',
           img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          params:'',
+          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
+          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
+          order_no:1,
+          plays:8888,
+          zan:8888,
+          uplateTime:'2018-01-12 18:36',
           status:1,
         },
         {
-          id:2,
-          banner_no:2,
-          page_type:2,
+          id:1,
+          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
+          user_name:'天下第一',
           img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:2,
+          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
+          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
+          order_no:1,
+          plays:8888,
+          zan:8888,
+          uplateTime:'2018-01-12 18:36',
           status:1,
         },
         {
-          id:3,
-          banner_no:3,
-          page_type:3,
+          id:1,
+          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
+          user_name:'天下第一',
           img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:3,
+          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
+          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
+          order_no:1,
+          plays:8888,
+          zan:8888,
+          uplateTime:'2018-01-12 18:36',
           status:1,
         },
         {
-          id:4,
-          banner_no:4,
-          page_type:4,
+          id:1,
+          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
+          user_name:'天下第一',
           img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:4,
+          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
+          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
+          order_no:1,
+          plays:8888,
+          zan:8888,
+          uplateTime:'2018-01-12 18:36',
           status:1,
         }
       ]
@@ -452,5 +453,11 @@ export default {
   }
   img{
     width: 100%;
+  }
+  a{
+  	color: green;
+  	&:hover{
+		text-decoration: underline;
+  	}
   }
 </style>

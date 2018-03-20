@@ -1,36 +1,27 @@
+<!-- 视频分类模块 -->
 <template>
   <div class="app-container calendar-list-container">
     <!-- banner配置规则 -->
    
     <div class="filter-container">
-    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增轮播图</el-button>
+    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增视频分类</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="排序" width="65">
+      <el-table-column align="center" label="分类id" width="65">
         <template slot-scope="scope">
           <span>{{scope.row.banner_no}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="页面名称">
+      <el-table-column width="auto" align="center" label="分类名称">
         <template slot-scope="scope">
           <span>{{ scope.row.page_type | typeFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="auto" class="img-show" align="center" label="展示图片">
-        <template slot-scope="scope">
-          <img :src="scope.row.img_url">
-        </template>
-      </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转链接">
+      <el-table-column width="150px" align="center" label="排序">
         <template slot-scope="scope">
           <span>{{scope.row.url || '无'}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转参数">
-        <template slot-scope="scope">
-          <span>{{scope.row.params || '无'}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="是否可用">
@@ -48,52 +39,17 @@
         </template>
       </el-table-column>
     </el-table>
-
-     <div class="banner-rules">
-      <div class="title">
-          配置提示：轮播图跳转分为：普通网页和app内部跳转，参数选择参考下表  
-      </div>
-         <el-table key='1' :data="bannerRulesList"  border fit highlight-current-row style="width:500px;"
-      >
-      <el-table-column align="center" label="跳转类型" width="200">
-        <template slot-scope="scope">
-          <span> {{scope.row.title}} </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="跳转路径" width="150">
-        <template slot-scope="scope">
-          <span> {{scope.row.url || '不填'}} </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="跳转参数" width="auto">
-        <template slot-scope="scope">
-          <span> {{scope.row.paramsId || '不填'}} </span>
-        </template>
-      </el-table-column>
-      
-    </el-table>
-    </div>
-
+	
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="跳转页面" prop="page_type">
-          <el-select class="filter-item" v-model="temp.page_type" placeholder="请选择跳转页面">
-            <el-option v-for="item in  gotype" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="展示图片" prop="img_url">
-          <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
+        <el-form-item label="分类名称" prop="page_type">
+          <el-input v-model="temp.page_type"></el-input>
         </el-form-item>
         <el-form-item label="跳转链接" prop="page_type">
           <el-input v-if="temp.page_type == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
           <el-input v-else disabled value="普通网页无需输入跳转链接"></el-input>
         </el-form-item>
-        <el-form-item label="跳转参数" prop="params">
-          <el-input v-if="temp.page_type != 1" placeholder="请输入参数，如：课程id，推荐单id，分析师id"  v-model="temp.params"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转参数"></el-input>
-        </el-form-item>
-        <el-form-item label="轮播排序" prop="params">
+        <el-form-item label="分类排序" prop="params">
           <el-input-number v-model="temp.banner_no"></el-input-number>
         </el-form-item>
       </el-form>

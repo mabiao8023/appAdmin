@@ -113,13 +113,24 @@ export const asyncRouterMap = [
         { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: 'purchaseRecords', meta: { title: 'purchaseRecords' }},
         { path: 'analystBilling', component: _import('trading/analystBilling'), name: 'analystBilling', meta: { title: 'analystBilling' }},
         { path: 'analystShare', component: _import('trading/analystShare'), name: 'analystShare', meta: { title: 'analystShare' }},
-        { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: 'analystIntegration', meta: { title: 'analystIntegration' }},
-
-        
+        { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: 'analystIntegration', meta: { title: 'analystIntegration' }},       
       ]
     },
 
-
+    {
+      path: '/video',
+      component: Layout,
+      redirect: 'noredirect',
+      name: 'video',
+      meta: {
+        title: 'video',
+        icon: 'icon'
+      },
+      children: [
+        { path: 'videoCategory', component: _import('video/videoCategory'), name: 'videoCategory', meta: { title: 'videoCategory' }},
+        { path: 'videoList', component: _import('video/videoList'), name: 'videoList', meta: { title: 'videoList' }},
+      ]
+    },
   {
     path: '/permission',
     component: Layout,
