@@ -2,14 +2,32 @@
 <template>
   <div class="app-container calendar-list-container">
       <el-row class="num-input">
-          会员每日登录可奖励球票，每日登录奖励球票
+          <el-col span="5" align="left">
+              每日登录弹窗状态
+          </el-col>  
+          <el-col span="5" align="left">
+              <el-switch
+                v-model="isOpenPop"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="开启"
+                inactive-text="关闭"
+                >
+              </el-switch>
+          </el-col>  
       </el-row> 
       <el-row class="num-input">
-        <el-input-number></el-input-number>
-      </el-row>
-      <el-row class="num-input">
-        <el-button type="primary">提交修改</el-button>
-        <el-button>取消</el-button>
+          <el-col span="5" align="left">
+              每日登录奖励球票数量
+          </el-col>  
+          <el-col span="5" align="left">
+              <el-input-number v-model="giveNums"></el-input-number>
+          </el-col>  
+      </el-row> 
+      <el-row  class="num-input">
+        <el-col span="10">
+          <el-button type="primary">确认修改</el-button>
+        </el-col>
       </el-row>  
   </div>
 </template>
@@ -28,6 +46,8 @@ export default {
   },
   data() {
     return {
+      isOpenPop:false,
+      giveNums:1
     }
   },
   created() {
@@ -39,7 +59,7 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
   .num-input{
-    padding: 40px 0;
+    padding: 20px 0;
     text-align: center;
   }
 </style>

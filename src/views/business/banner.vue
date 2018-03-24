@@ -7,8 +7,10 @@
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+
+    :default-sort = "{prop: 'banner_no', order: 'ascending'}"
       style="width: 100%">
-      <el-table-column align="center" label="排序" width="65">
+      <el-table-column align="center" sortable prop="banner_no" label="排序" width="100">
         <template slot-scope="scope">
           <span>{{scope.row.banner_no}}</span>
         </template>
@@ -48,31 +50,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-     <div class="banner-rules">
-      <div class="title">
-          配置提示：轮播图跳转分为：普通网页和app内部跳转，参数选择参考下表  
-      </div>
-         <el-table key='1' :data="bannerRulesList"  border fit highlight-current-row style="width:500px;"
-      >
-      <el-table-column align="center" label="跳转类型" width="200">
-        <template slot-scope="scope">
-          <span> {{scope.row.title}} </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="跳转路径" width="150">
-        <template slot-scope="scope">
-          <span> {{scope.row.url || '不填'}} </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="跳转参数" width="auto">
-        <template slot-scope="scope">
-          <span> {{scope.row.paramsId || '不填'}} </span>
-        </template>
-      </el-table-column>
-      
-    </el-table>
-    </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>

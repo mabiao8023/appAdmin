@@ -24,9 +24,6 @@
      <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>
    </div>
     -->
-    <div class="tip">
-    	分析师等级的高低涉及到分析师分成和胜率计算的问题，建议前期先以其中一个等级进行发单。
-    </div>
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
       <el-table-column align="center" label="序号" width="65">
@@ -38,6 +35,11 @@
         <template slot-scope="scope">
           <span>{{scope.row.title}}</span>
         </template>	
+      </el-table-column>
+      <el-table-column width="100px" align="center" label="等级图标">
+        <template slot-scope="scope">
+          <img width="100%" :src="scope.row.icon">
+        </template> 
       </el-table-column>
       <el-table-column min-width="100px" align="center" label="包月价格">
         <template slot-scope="scope">
@@ -70,6 +72,9 @@
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
         <el-form-item label="等级称号" prop="title">
           <el-input v-model="temp.title"></el-input>
+        </el-form-item>
+         <el-form-item label="等级图标" prop="icon">
+          <uploadImg :imgUrl="temp.icon" @input="uploadImg"></uploadImg>
         </el-form-item>
         <el-form-item label="包月价格（元）" prop="monthPrize">
           <el-input-number v-model="temp.monthPrize"></el-input-number>
@@ -105,6 +110,7 @@
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
+import uploadImg from '@/components/Upload/uploadImg'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -123,6 +129,9 @@ export default {
   name: 'complexTable',
   directives: {
     waves
+  },
+  components:{
+    uploadImg
   },
   data() {
     return {
@@ -185,36 +194,45 @@ export default {
     this.getList()
   },
   methods: {
+    // 上传图片的组件生成的图片
+    uploadImg(url){
+      this.temp.icon = url
+    },
     getList() {
       this.listLoading = true
       this.list = [
       	{
       		id:1,
       		title:'V1等级',
+           icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:0,
       		yearPrize:0,
       		freeNums:1,
       	},{
       		id:2,
       		title:'V2等级',
+           icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:88,
       		yearPrize:1888,
       		freeNums:3,
       	},{
 			id:3,
       		title:'V3等级',
+           icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:188,
       		yearPrize:2888,
       		freeNums:6,
       	},{
 			id:4,
       		title:'V4等级',
+           icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:288,
       		yearPrize:3888,
       		freeNums:10,
       	},{
-			id:5,
+			    id:5,
       		title:'V5等级',
+           icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:388,
       		yearPrize:4888,
       		freeNums:15,

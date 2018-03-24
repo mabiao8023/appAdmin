@@ -79,9 +79,24 @@ export const asyncRouterMap = [
           { path: 'chargeConf', component: _import('business/chargeConf'), name: 'chargeConf', meta: { title: 'chargeConf' }},
         { path: 'entry', component: _import('business/entry'), name: 'entry', meta: { title: 'entry' }},
         { path: 'banner', component: _import('business/banner'), name: 'banner', meta: { title: 'banner' }},
+        { path: 'marquee', component: _import('business/marquee'), name: 'marquee', meta: { title: 'marquee' }},
         { path: 'advertising', component: _import('business/advertising'), name: 'advertising', meta: { title: 'advertising' }},
         { path: 'push', component: _import('business/push'), name: 'push', meta: { title: 'push' }},
-        { path: 'recommend-analysts', component: _import('business/recommend-analysts'), name: 'recommendAnalysts', meta: { title: 'recommendAnalysts' }},
+        // { path: 'recommend-analysts', component: _import('business/recommend-analysts'), name: 'recommendAnalysts', meta: { title: 'recommendAnalysts' }},
+      ]
+    },
+    {
+      path: '/information',
+      component: Layout,
+      redirect: 'noredirect',
+      name: 'information',
+      meta: {
+        title: 'information',
+        icon: 'icon'
+      },
+      children: [
+        { path: 'best', component: _import('information/best'), name: 'best', meta: { title: 'best' }},
+        { path: 'list', component: _import('information/list'), name: 'list', meta: { title: 'list' }},
       ]
     },
     {

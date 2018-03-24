@@ -6,11 +6,15 @@ export default {
     analystsMember:'分析师等级配置',
     chargeConf:'用户充值配置',
     entry:'启动页配置',
-    banner:'首页轮播图',
-    advertising:'全部广告位',
-    push:'推送',
+    banner:'首页轮播图配置',
+    marquee:'球稳头条配置',
+    advertising:'广告位配置',
+    push:'推送配置',
     recommendAnalysts:'首页分析师推荐',
 
+    information:'情报专区',
+    list:'情报列表',
+    best:'精推情报',
 
     users:'用户管理',
     userList:'用户列表',

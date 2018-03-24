@@ -1,48 +1,68 @@
+<!-- 精推情报列表 -->
+
 <template>
   <div class="app-container calendar-list-container">
+    <!-- banner配置规则 -->
+   
     <div class="filter-container">
-    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增启动页面</el-button>
+    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增精推情报</el-button>
     </div>
-    
+
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+
     :default-sort = "{prop: 'banner_no', order: 'ascending'}"
       style="width: 100%">
-      <el-table-column align="center" sortable prop="banner_no" label="排序" width="100">
+      <el-table-column align="center" label="球队id" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.banner_no}}</span>
+          <span>{{scope.row.match_id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="页面名称">
+      <el-table-column align="center" label="主队" width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.page_type | typeFilter }}</span>
+          <img :src="scope.row.home_flag" width="40px" alt="">
+          <div>{{scope.row.home}}</div>
         </template>
       </el-table-column>
-      <el-table-column width="auto" class="img-show" align="center" label="展示图片">
+       <el-table-column align="center" label="客队" width="100">
         <template slot-scope="scope">
-          <img :src="scope.row.img_url">
+          <img :src="scope.row.away_flag" width="40px" alt="">
+          <div>{{scope.row.away}}</div>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转链接">
+      <el-table-column width="150px" align="center" label="比赛时间">
         <template slot-scope="scope">
-          <span>{{scope.row.url || '无'}}</span>
+          <span>{{scope.row.match_time | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转参数">
+      <el-table-column align="center" label="联赛" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.params || '无'}}</span>
+          <span>{{scope.row.league_name}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="是否可用">
+      <el-table-column align="center" label="推荐方案数" width="100">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
+          <span>{{scope.row.orders}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="情报排序" width="100">
+        <template slot-scope="scope">
+          <span>{{scope.row.order_no}}</span>
+        </template>
+      </el-table-column>
+       <el-table-column align="center" label="情报" width="auto">
+        <template slot-scope="scope">
+            <el-row>
+              <el-button type="danger" size="mini" @click.stop.prevent="handleShowInformation(scope.row.home_id)">主队情报</el-button>
+            </el-row> 
+            <el-row>
+              <el-button type="warning" style="margin-top:5px;" size="mini" @click.stop.prevent="handleShowInformation(scope.row.away_id)">客队情报</el-button>
+            </el-row>
         </template>
       </el-table-column>
      
       <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-         <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '启用' }}
-          </el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -50,26 +70,19 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="跳转页面" prop="page_type">
-          <el-select class="filter-item" v-model="temp.page_type" placeholder="请选择跳转页面">
-            <el-option v-for="item in  gotype" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
+        <el-form-item label="比赛信息" prop="page_type">
+          <span>{{ temp.home }} vs {{ temp.away }} </span>
         </el-form-item>
-        <el-form-item label="展示图片" prop="img_url">
-          <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
+        <el-form-item label="主队情报" prop="params">
+         
+          <el-input  value="普通网页无需输入跳转参数"></el-input>
         </el-form-item>
-        <el-form-item label="跳转链接" prop="page_type">
-          <el-input v-if="temp.page_type == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转链接"></el-input>
+        <el-form-item label="客队情报" prop="params">
+          <el-input value="普通网页无需输入跳转参数"></el-input>
         </el-form-item>
-        <el-form-item label="跳转参数" prop="params">
-          <el-input v-if="temp.page_type != 1" placeholder="请输入参数，如：课程id，推荐单id，分析师id"  v-model="temp.params"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转参数"></el-input>
+        <el-form-item label="排序" prop="params">
+          <el-input-number v-model="temp.order_no"></el-input-number>
         </el-form-item>
-        <!-- <el-form-item label="轮播排序" prop="params">
-          <el-input-number v-model="temp.banner_no"></el-input-number>
-        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
@@ -77,17 +90,12 @@
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
-
-    <el-dialog title="Reading statistics" :visible.sync="dialogPvVisible">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel"> </el-table-column>
-        <el-table-column prop="pv" label="Pv"> </el-table-column>
-      </el-table>
+    <el-dialog title="球队情报信息" :visible.sync="dialogPvVisible">
+      这是一些情报信息
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">确定</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
@@ -162,8 +170,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '编辑启动页面',
-        create: '新增启动页面'
+        update: '编辑轮播图',
+        create: '新增轮播图'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -216,47 +224,50 @@ export default {
 
           this.temp.img_url = url
     },
-    // 获得全部的列表
+  	// 获得全部的列表
     getList() {
       this.listLoading = true
       this.listLoading = false
       this.list = [
         {
-          id:1,
-          banner_no:1,
-          page_type:1,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          params:'',
-          status:1,
+          match_id:1,
+          home_id:3,
+          home:'中国',
+          home_flag:'https://relottery.nosdn.127.net/match/soccer/2_14324.jpg?imageView&thumbnail=20y20&quality=85',
+          away:'韩国',
+          away_id:3,
+          away_flag:'https://relottery.nosdn.127.net/match/soccer/2_19527.jpg?imageView&thumbnail=20y20&quality=85',
+          match_time:1521904512,
+          orders:1111,
+          league_name:'世界杯',
+          order_no:1
         },
         {
-          id:2,
-          banner_no:2,
-          page_type:2,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:2,
-          status:0,
+          match_id:1,
+          home_id:3,
+          home:'中国',
+          home_flag:'https://relottery.nosdn.127.net/match/soccer/2_14324.jpg?imageView&thumbnail=20y20&quality=85',
+          away:'韩国',
+          away_id:3,
+          away_flag:'https://relottery.nosdn.127.net/match/soccer/2_19527.jpg?imageView&thumbnail=20y20&quality=85',
+          match_time:1521904512,
+          orders:1111,
+          league_name:'世界杯',
+          order_no:1
         },
         {
-          id:3,
-          banner_no:3,
-          page_type:3,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:3,
-          status:0,
+         match_id:1,
+          home_id:3,
+          home:'中国',
+          home_flag:'https://relottery.nosdn.127.net/match/soccer/2_14324.jpg?imageView&thumbnail=20y20&quality=85',
+          away:'韩国',
+          away_id:3,
+          away_flag:'https://relottery.nosdn.127.net/match/soccer/2_19527.jpg?imageView&thumbnail=20y20&quality=85',
+          match_time:1521904512,
+          orders:1111,
+          league_name:'世界杯',
+          order_no:1
         },
-        {
-          id:4,
-          banner_no:4,
-          page_type:4,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:4,
-          status:0,
-        }
       ]
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
@@ -265,6 +276,15 @@ export default {
       // })
     },
 
+    /* 显示当前球队不同的情报 */
+    handleShowInformation(id) {
+      this.dialogPvVisible = true
+      /* 显示球队情报信息 */
+      /*fetchPv(pv).then(response => {
+        this.pvData = response.data.pvData
+        this.dialogPvVisible = true
+      })*/
+    },
     // 页码过滤
     handleFilter() {
       this.listQuery.page = 1
@@ -285,19 +305,15 @@ export default {
 
     // 修改当前行的状态
     handleModifyStatus(row, status) {
-      if( !row.status && this.list.some( val => val.status )){
-        return this.$message({
-          message: '启动页面只能开启一个，如需开启请先冻结其他',
-          type: 'error'
-        })
-      }
+    
+
       this.$message({
         message: '操作成功',
         type: 'success'
       })
       row.status = status
     },
-    
+
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -313,11 +329,8 @@ export default {
 
     // 新增数据初始化
     handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+      this.$router.push({
+        path:'/information/list'
       })
     },
 
@@ -352,7 +365,7 @@ export default {
       })
     },
 
-    // 模拟更新数据
+  	// 模拟更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -428,7 +441,7 @@ export default {
   .title{
     padding-bottom: 20px;
   }
-  img{
-    width: 100%;
-  }
+/*   img{
+  width: 100%;
+} */
 </style>
