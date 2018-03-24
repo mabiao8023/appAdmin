@@ -2,7 +2,7 @@
 <template>
   <div class="app-container calendar-list-container">
       <el-row class="num-input">
-          会员每日登录可奖励饭票，每日登录奖励饭票
+          会员每日登录可奖励球票，每日登录奖励球票
       </el-row> 
       <el-row class="num-input">
         <el-input-number></el-input-number>

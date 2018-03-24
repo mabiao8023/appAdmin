@@ -35,6 +35,11 @@
           <span>{{scope.row.title}}</span>
         </template>	
       </el-table-column>
+      <el-table-column width="100px" align="center" label="等级图标">
+        <template slot-scope="scope">
+          <img width="100%" :src="scope.row.icon">
+        </template> 
+      </el-table-column>
       <el-table-column min-width="100px" align="center" label="包月价格">
         <template slot-scope="scope">
           <span>{{scope.row.monthPrize}}元</span>
@@ -195,6 +200,7 @@ export default {
       	{
       		id:1,
       		title:'大众会员',
+          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:0,
       		yearPrize:0,
       		freeNums:1,
@@ -202,6 +208,7 @@ export default {
       	},{
       		id:2,
       		title:'黄金会员',
+          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:88,
       		yearPrize:1888,
       		freeNums:3,
@@ -209,6 +216,7 @@ export default {
       	},{
 			id:3,
       		title:'铂金会员',
+          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:188,
       		yearPrize:2888,
       		freeNums:6,
@@ -216,6 +224,7 @@ export default {
       	},{
 			id:4,
       		title:'钻石会员',
+          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:288,
       		yearPrize:3888,
       		freeNums:10,
@@ -223,6 +232,7 @@ export default {
       	},{
 			id:5,
       		title:'至尊会员',
+          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
       		monthPrize:388,
       		yearPrize:4888,
       		freeNums:15,
