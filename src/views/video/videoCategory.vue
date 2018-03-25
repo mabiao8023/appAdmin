@@ -9,19 +9,19 @@
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="分类id" width="65">
+      <el-table-column align="center" label="分类id" width="150">
         <template slot-scope="scope">
-          <span>{{scope.row.banner_no}}</span>
+          <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="auto" align="center" label="分类名称">
+      <el-table-column width="250px" align="center" label="分类名称">
         <template slot-scope="scope">
-          <span>{{ scope.row.page_type | typeFilter }}</span>
+          <span>{{ scope.row.tltle }}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="排序">
         <template slot-scope="scope">
-          <span>{{scope.row.url || '无'}}</span>
+          <span>{{scope.row.video_no}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="是否可用">
@@ -30,7 +30,7 @@
         </template>
       </el-table-column>
      
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+      <el-table-column align="center" :label="$t('table.actions')" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '开启' }}
@@ -42,15 +42,11 @@
 	
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="分类名称" prop="page_type">
-          <el-input v-model="temp.page_type"></el-input>
+        <el-form-item label="分类名称" prop="title">
+          <el-input v-model="temp.title"></el-input>
         </el-form-item>
-        <el-form-item label="跳转链接" prop="page_type">
-          <el-input v-if="temp.page_type == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转链接"></el-input>
-        </el-form-item>
-        <el-form-item label="分类排序" prop="params">
-          <el-input-number v-model="temp.banner_no"></el-input-number>
+        <el-form-item label="分类排序" prop="video_no">
+          <el-input-number v-model="temp.video_no"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -144,8 +140,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '编辑轮播图',
-        create: '新增轮播图'
+        update: '编辑视频分类',
+        create: '新增视频分类'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -205,39 +201,21 @@ export default {
       this.list = [
         {
           id:1,
-          banner_no:1,
-          page_type:1,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          params:'',
+          video_no:1,
           status:1,
+          tltle:'不可描述',
         },
         {
           id:2,
-          banner_no:2,
-          page_type:2,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:2,
+          video_no:2,
           status:1,
+          tltle:'视频干货',
         },
         {
           id:3,
-          banner_no:3,
-          page_type:3,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:3,
-          status:1,
-        },
-        {
-          id:4,
-          banner_no:4,
-          page_type:4,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:4,
-          status:1,
+          video_no:3,
+          status:3,
+          tltle:'足彩赛事',
         }
       ]
       // fetchList(this.listQuery).then(response => {
