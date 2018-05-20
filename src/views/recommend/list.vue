@@ -1,73 +1,97 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增推送内容</el-button>
+      <el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.league_id" placeholder="联赛筛选">
+        <el-option v-for="item in leagueList" :key="item" :label="item.league_name" :value="item.id">
+        </el-option>
+      </el-select>
+      <el-date-picker
+        v-model="listQuery.date"
+        align="right"
+        type="date"
+        placeholder="选择日期"
+        value-format="yyyy-MM-dd"
+      >
+      </el-date-picker>
+      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+      <!-- <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
+      <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
+      <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox> -->
     </div>
-    
+
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="推送id" width="65">
+      <el-table-column align="center" label="比赛id" width="165">
         <template slot-scope="scope">
-          <span>{{scope.row.id}}</span>
+          <span>{{scope.row.match_id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="页面名称">
+      <el-table-column align="center" label="比赛日期" width="165">
         <template slot-scope="scope">
-          <span>{{ scope.row.page_type | typeFilter }}</span>
+          <span>{{listQuery.date}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="推送内容" width="400">
+      <el-table-column align="center" label="联赛" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.text}}</span>
+          <span :style="{'color':scope.row.league_color}">{{scope.row.league_name}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转链接">
+      <el-table-column align="center" label="主队" width="165">
         <template slot-scope="scope">
-          <span>{{scope.row.url || '无'}}</span>
+          <span>{{scope.row.home}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转参数">
+      <el-table-column align="center" label="客队" width="165">
         <template slot-scope="scope">
-          <span>{{scope.row.params || '无'}}</span>
+          <span >{{scope.row.away}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="是否可用">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '已推送' : '未推送'}}</el-tag>
-        </template>
-      </el-table-column>
-     
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+  
+      <el-table-column align="center" :label="$t('table.actions')" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-         <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '推送' : '冻结' }}
+          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
           </el-button>
-          <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
+          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}
+          </el-button>
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">{{$t('table.delete')}}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="跳转页面" prop="page_type">
-          <el-select class="filter-item" v-model="temp.page_type" placeholder="请选择跳转页面">
-            <el-option v-for="item in  gotype" :key="item.key" :label="item.display_name" :value="item.key">
+      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
+        <el-form-item :label="$t('table.type')" prop="type">
+          <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
+            <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="展示图片" prop="img_url">
-          <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
+        <el-form-item :label="$t('table.date')" prop="timestamp">
+          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="跳转链接" prop="page_type">
-          <el-input v-if="temp.page_type == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转链接"></el-input>
+        <el-form-item :label="$t('table.title')" prop="title">
+          <el-input v-model="temp.title"></el-input>
         </el-form-item>
-        <el-form-item label="跳转参数" prop="params">
-          <el-input v-if="temp.page_type != 1" placeholder="请输入参数，如：课程id，推荐单id，分析师id"  v-model="temp.params"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转参数"></el-input>
+        <el-form-item :label="$t('table.status')">
+          <el-select class="filter-item" v-model="temp.status" placeholder="Please select">
+            <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="轮播排序" prop="params">
-          <el-input-number v-model="temp.banner_no"></el-input-number>
+        <el-form-item :label="$t('table.importance')">
+          <el-rate style="margin-top:8px;" v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max='3'></el-rate>
+        </el-form-item>
+        <el-form-item :label="$t('table.remark')">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="Please input" v-model="temp.remark">
+          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -91,31 +115,19 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList } from '@/api/recommendMatch'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
-import uploadImg from '@/components/Upload/uploadImg'
 
-// 页面跳转类型
-
-const gotype = [
-  { key: '1', display_name: '普通网页' },
-  { key: '2', display_name: '推荐单页面' },
-  { key: '3', display_name: '分析师页面' },
-  { key: '4', display_name: '课程列表页面' },
-  { key: '5', display_name: '课程购买页面' },
-  { key: '6', display_name: '视频列表页面' },
-  { key: '7', display_name: '会员升级页面' },
-  { key: '8', display_name: '绑定手机页面' },
+const calendarTypeOptions = [
+  { key: 'CN', display_name: 'China' },
+  { key: 'US', display_name: 'USA' },
+  { key: 'JP', display_name: 'Japan' },
+  { key: 'EU', display_name: 'Eurozone' }
 ]
 
 // arr to obj ,such as { CN : "China", US : "USA" }
-/*const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})*/
-
-const goTypeKeyValue = gotype.reduce((acc, cur) => {
+const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
   return acc
 }, {})
@@ -125,12 +137,8 @@ export default {
   directives: {
     waves
   },
-  components:{
-    uploadImg
-  },
   data() {
     return {
-      gotype,
       tableKey: 0,
       list: null,
       total: null,
@@ -138,13 +146,13 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
+        date: '2018-05-20',
+        league_id: '',
         type: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
-      // calendarTypeOptions,
+      calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
@@ -155,14 +163,13 @@ export default {
         timestamp: new Date(),
         title: '',
         type: '',
-        status: 'published',
-        img_url:''
+        status: 'published'
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '编辑推送内容',
-        create: '新增推送内容'
+        update: 'Edit',
+        create: 'Create'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -172,25 +179,7 @@ export default {
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
-
-      bannerRulesList:[
-        {
-          id:1,
-          文本:'普通网页',
-          url:'www.baidu.com',
-          paramsId:'',
-        },
-        {
-          title:'推荐页面',
-          url:'',
-          paramsId:'5',
-        },
-        {
-          title:'其他',
-          url:'',
-          paramsId:'...',
-        }
-      ]
+      leagueList:[],
     }
   },
   filters: {
@@ -203,83 +192,44 @@ export default {
       return statusMap[status]
     },
     typeFilter(type) {
-      return goTypeKeyValue[type]
+      return calendarTypeKeyValue[type]
     }
   },
   created() {
     this.getList()
   },
   methods: {
-    // 上传图片的组件生成的图片
-    uploadImg(url){
-        console.log('url:' + url)
-
-          this.temp.img_url = url
-    },
-    // 获得全部的列表
     getList() {
-      this.listLoading = true
-      this.listLoading = false
-      this.list = [
-        {
-          id:1,
-          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
-          page_type:2, /* 推送的页面类型 */
-          url:'www.baidu.com',
-          params:'',   
-          status:1,
-        },
-        {
-          id:1,
-          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
-          page_type:2, /* 推送的页面类型 */
-          url:'www.baidu.com',
-          params:'',   
-          status:1,
-        },
-        {
-          id:1,
-          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
-          page_type:2, /* 推送的页面类型 */
-          url:'www.baidu.com',
-          params:'',   
-          status:1,
-        },
-        {
-          id:1,
-          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
-          page_type:2, /* 推送的页面类型 */
-          url:'www.baidu.com',
-          params:'',   
-          status:1,
-        },
-      ]
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+      this.listLoading = true;
+      // this.list = [{
+      //     id:1,
+      //     match_id:'23',
+      //     odd_id:'12424',
+      //     league_name:'联赛名称',
+      //     league_color:'联赛颜色',
+      //     home:'主队',
+      //     away:'客队',
+      //     match_time:'2018-08-12'
+      // }];
+      fetchList(this.listQuery).then(response => {
+        this.list = response.data.data.match_list
+        this.leagueList = response.data.data.league_list
+        this.total = response.data.data.meta.total
+        this.listLoading = false
+      })
     },
-
-    // 页码过滤
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
-
-    // 数量限制搜索
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
     },
-
-    // 根据页面搜索
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
     },
-
-    // 修改当前行的状态
     handleModifyStatus(row, status) {
       this.$message({
         message: '操作成功',
@@ -287,7 +237,6 @@ export default {
       })
       row.status = status
     },
-
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -296,12 +245,9 @@ export default {
         timestamp: new Date(),
         title: '',
         status: 'published',
-        type: '',
-        img_url:''
+        type: ''
       }
     },
-
-    // 新增数据初始化
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -310,8 +256,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-
-    // 新增数据
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -330,8 +274,6 @@ export default {
         }
       })
     },
-
-    // 设置当前编辑窗口
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -341,8 +283,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-
-    // 模拟更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -367,8 +307,6 @@ export default {
         }
       })
     },
-
-    // 删除列表
     handleDelete(row) {
       this.$notify({
         title: '成功',
@@ -379,15 +317,12 @@ export default {
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
     },
-
-    // 获得各渠道下的浏览数
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
         this.pvData = response.data.pvData
         this.dialogPvVisible = true
       })
     },
-    // 下载exele
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
@@ -398,7 +333,6 @@ export default {
         this.downloadLoading = false
       })
     },
-    // 格式化Json
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -411,14 +345,3 @@ export default {
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-  .banner-rules{
-    padding: 20px 0;
-  }
-  .title{
-    padding-bottom: 20px;
-  }
-  img{
-    width: 100%;
-  }
-</style>

@@ -11,10 +11,16 @@ export default {
     advertising:'广告位配置',
     push:'推送配置',
     recommendAnalysts:'首页分析师推荐',
+    adList:'广告列表',
 
     information:'情报专区',
     list:'情报列表',
     best:'精推情报',
+
+    /* 推荐专区 */
+    recommend:'发推荐模块',
+    recommendList:'推荐列表',
+
 
     users:'用户管理',
     userList:'用户列表',

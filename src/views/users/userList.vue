@@ -217,7 +217,16 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
+      this.listLoading = true;
+      // this.list = [{
+      //     id:1,
+      //     nickname:'哈哈哈',
+      //     phone:'1782374832',
+      //     creat_time:'注册时间',
+      //     type:1,
+      //     status:0,   /* 状态标识 */
+      //     job_title:'对方水电费的说法是否是打发', /* 工作描述 */
+      // }];
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
