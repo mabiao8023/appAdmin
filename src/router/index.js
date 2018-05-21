@@ -101,6 +101,20 @@ export const asyncRouterMap = [
       ]
     },
     {
+      path: '/rank',
+      component: Layout,
+      redirect: 'noredirect',
+      name: 'rank',
+      meta: {
+        title: 'rank',
+        icon: 'icon'
+      },
+      children: [
+        { path: 'fengyun', component: _import('rank/fengyun'), name: 'fengyun', meta: { title: 'fengyun' }},
+        { path: 'mingzhong', component: _import('rank/mingzhong'), name: 'mingzhong', meta: { title: 'mingzhong' }},
+      ]
+    },
+    {
       path: '/users',
       component: Layout,
       redirect: 'noredirect',
@@ -129,7 +143,7 @@ export const asyncRouterMap = [
         { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: 'purchaseRecords', meta: { title: 'purchaseRecords' }},
         { path: 'analystBilling', component: _import('trading/analystBilling'), name: 'analystBilling', meta: { title: 'analystBilling' }},
         { path: 'analystShare', component: _import('trading/analystShare'), name: 'analystShare', meta: { title: 'analystShare' }},
-        { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: 'analystIntegration', meta: { title: 'analystIntegration' }},       
+        { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: 'analystIntegration', meta: { title: 'analystIntegration' }},
       ]
     },
 
