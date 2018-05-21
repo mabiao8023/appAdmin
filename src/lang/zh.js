@@ -16,6 +16,10 @@ export default {
     list:'情报列表',
     best:'精推情报',
 
+    rank:'首页排行榜',
+    fengyun:'风云榜',
+    mingzhong:'命中榜',
+
     users:'用户管理',
     userList:'用户列表',
     analysts:'分析师列表',
