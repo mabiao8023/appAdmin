@@ -4,29 +4,8 @@
 
 <template>
   <div class="app-container calendar-list-container">
-   <!--  <div class="filter-container">
-     <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">
-     </el-input>
-     <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">
-       <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">
-       </el-option>
-     </el-select>
-     <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">
-       <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">
-       </el-option>
-     </el-select>
-     <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-       <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
-       </el-option>
-     </el-select>
-     <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-     <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-     <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
-     <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>
-   </div>
-    -->
     <div class="tip">
-    	充值单位为“福卡”,与人民币比例为1：1兑换。
+    	充值单位为“球币”,与人民币比例为1：1兑换。
     </div>
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
@@ -45,12 +24,7 @@
           <span>{{scope.row.money}}元</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="赠送数目">
-        <template slot-scope="scope">
-          <span>{{scope.row.give}}元</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" align="center" label="赠送饭票数">
+      <el-table-column min-width="150px" align="center" label="赠送球票数">
         <template slot-scope="scope">
           <span>{{scope.row.ticket}}张</span>
         </template>
@@ -82,9 +56,9 @@
         <el-form-item label="充值数目" prop="money">
           <el-input-number v-model="temp.money"></el-input-number>
         </el-form-item>
-        <el-form-item label="赠送数目" prop="give">
+      <!--   <el-form-item label="赠送数目" prop="give">
           <el-input-number v-model="temp.give"></el-input-number>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="赠送饭票数" prop="ticket">
           <el-input-number v-model="temp.ticket"></el-input-number>
         </el-form-item>

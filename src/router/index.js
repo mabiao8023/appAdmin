@@ -77,7 +77,7 @@ export const asyncRouterMap = [
         { path: 'userMember', component: _import('business/userMember'), name: 'userMember', meta: { title: 'userMember' }},
         { path: 'analystsMember', component: _import('business/analystsMember'), name: 'analystsMember', meta: { title: 'analystsMember' }},
         { path: 'chargeConf', component: _import('business/chargeConf'), name: 'chargeConf', meta: { title: 'chargeConf' }},
-        { path: 'entry', component: _import('business/entry'), name: 'entry', meta: { title: 'entry' }},
+        // { path: 'entry', component: _import('business/entry'), name: 'entry', meta: { title: 'entry' }},
         { path: 'banner', component: _import('business/banner'), name: 'banner', meta: { title: 'banner' }},
         { path: 'marquee', component: _import('business/marquee'), name: 'marquee', meta: { title: 'marquee' }},
         { path: 'advertising', component: _import('business/advertising'), name: 'advertising', meta: { title: 'advertising' }},
