@@ -1,30 +1,30 @@
 <!-- 视频列表模块 -->
 <template>
   <div class="app-container calendar-list-container">
-    
-   
-   <!--  <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增视频</el-button> -->
+    <!---->
+   <!---->
+   <!--&lt;!&ndash;  <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增视频</el-button> &ndash;&gt;-->
 
-     <div class="filter-container">
-     <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">
-     </el-input>
-     <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">
-       <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">
-       </el-option>
-     </el-select>
-     <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">
-       <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">
-       </el-option>
-     </el-select>
-     <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-       <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
-       </el-option>
-     </el-select>
-     <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-     <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-    <!--  <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button> -->
-     <!-- <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox> -->
-   </div>
+     <!--<div class="filter-container">-->
+     <!--<el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">-->
+     <!--</el-input>-->
+     <!--<el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">-->
+       <!--<el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">-->
+       <!--</el-option>-->
+     <!--</el-select>-->
+     <!--<el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">-->
+       <!--<el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">-->
+       <!--</el-option>-->
+     <!--</el-select>-->
+     <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
+       <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
+       <!--</el-option>-->
+     <!--</el-select>-->
+     <!--<el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>-->
+     <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
+    <!--&lt;!&ndash;  <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button> &ndash;&gt;-->
+     <!--&lt;!&ndash; <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox> &ndash;&gt;-->
+   <!--</div>-->
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
@@ -73,16 +73,16 @@
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
       </el-table-column>
-     
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+
+      <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '开启' }}
           </el-button>
           <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-			 	
+
     </el-table>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
@@ -108,9 +108,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+        <el-button v-else type="primary" @click="updateData">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -120,7 +120,7 @@
         <el-table-column prop="pv" label="Pv"> </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -337,7 +337,7 @@ export default {
 
     // 修改当前行的状态
     handleModifyStatus(row, status) {
-    
+
 
       this.$message({
         message: '操作成功',

@@ -3,7 +3,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <!-- banner配置规则 -->
-   
+
     <div class="filter-container">
     <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增精推情报</el-button>
     </div>
@@ -53,14 +53,14 @@
         <template slot-scope="scope">
             <el-row>
               <el-button type="danger" size="mini" @click.stop.prevent="handleShowInformation(scope.row.home_id)">主队情报</el-button>
-            </el-row> 
+            </el-row>
             <el-row>
               <el-button type="warning" style="margin-top:5px;" size="mini" @click.stop.prevent="handleShowInformation(scope.row.away_id)">客队情报</el-button>
             </el-row>
         </template>
       </el-table-column>
-     
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+
+      <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
@@ -74,7 +74,7 @@
           <span>{{ temp.home }} vs {{ temp.away }} </span>
         </el-form-item>
         <el-form-item label="主队情报" prop="params">
-         
+
           <el-input  value="普通网页无需输入跳转参数"></el-input>
         </el-form-item>
         <el-form-item label="客队情报" prop="params">
@@ -85,9 +85,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+        <el-button v-else type="primary" @click="updateData">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="球队情报信息" :visible.sync="dialogPvVisible">
@@ -305,7 +305,7 @@ export default {
 
     // 修改当前行的状态
     handleModifyStatus(row, status) {
-    
+
 
       this.$message({
         message: '操作成功',

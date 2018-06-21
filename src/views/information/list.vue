@@ -1,27 +1,27 @@
 <!-- 比赛情报列表 -->
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
+    <!--<div class="filter-container">-->
 
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">
-      </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">
-        </el-option>
-      </el-select>
-      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">
-        <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">
-        </el-option>
-      </el-select>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
-        </el-option>
-      </el-select>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-      <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
-      <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>
-    </div>
+      <!--<el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">-->
+      <!--</el-input>-->
+      <!--<el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">-->
+        <!--<el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">-->
+        <!--</el-option>-->
+      <!--</el-select>-->
+      <!--<el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">-->
+        <!--<el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">-->
+        <!--</el-option>-->
+      <!--</el-select>-->
+      <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
+        <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
+        <!--</el-option>-->
+      <!--</el-select>-->
+      <!--<el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>-->
+      <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
+      <!--<el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>-->
+      <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
+    <!--</div>-->
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%"
@@ -68,7 +68,7 @@
           <el-row>
           	<el-col :span="12">
           		<el-button type="danger" @click.stop.prevent="handleShowInformation(scope.row.home_id)">主队情报</el-button>
-          	</el-col>	
+          	</el-col>
           	<el-col :span="12">
           		<el-button type="warning" @click.stop.prevent="handleShowInformation(scope.row.away_id)">客队情报</el-button>
           	</el-col>
@@ -84,7 +84,7 @@
     </el-table>
 
     <div class="pagination-container">
-      <el-button type="primary" @click.stop.prevent="choiceInformation">选为精推情报</el-button>	
+      <el-button type="primary" @click.stop.prevent="choiceInformation">选为精推情报</el-button>
       <el-pagination align="right" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
@@ -200,8 +200,8 @@ export default {
   	},
   	/* 选中的赛事情报信息 */
   	handleSelectionChange( val ){
-  		console.log( val ); 
-  		this.multipleSelection = val;	
+  		console.log( val );
+  		this.multipleSelection = val;
   	},
 
     getList() {

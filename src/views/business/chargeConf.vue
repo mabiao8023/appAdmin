@@ -4,27 +4,6 @@
 
 <template>
   <div class="app-container calendar-list-container">
-   <!--  <div class="filter-container">
-     <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">
-     </el-input>
-     <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">
-       <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">
-       </el-option>
-     </el-select>
-     <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">
-       <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">
-       </el-option>
-     </el-select>
-     <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-       <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
-       </el-option>
-     </el-select>
-     <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-     <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-     <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
-     <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>
-   </div>
-    -->
     <div class="tip">
     	充值单位为“福卡”,与人民币比例为1：1兑换。
     </div>
@@ -38,7 +17,7 @@
       <el-table-column width="150px" align="center" label="等级称号">
         <template slot-scope="scope">
           <span>{{scope.row.title}}</span>
-        </template>	
+        </template>
       </el-table-column>
       <el-table-column min-width="100px" align="center" label="充值数目">
         <template slot-scope="scope">
@@ -59,10 +38,10 @@
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status ? '可用':'不可用'}}</el-tag>
         </template>
-      </el-table-column>    
-      <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
+      </el-table-column>
+      <el-table-column align="center" :label="操作" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
         	<el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '解冻' }}
           </el-button>
         </template>
@@ -90,9 +69,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+        <el-button v-else type="primary" @click="updateData">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -102,7 +81,7 @@
         <el-table-column prop="pv" label="Pv"> </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -239,7 +218,7 @@ export default {
       		ticket:1,
       		status:1
       	}
-      ]	
+      ]
       this.listLoading = false
 
       // fetchList(this.listQuery).then(response => {

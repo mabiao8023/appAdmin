@@ -2,7 +2,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <!-- banner配置规则 -->
-   
+
     <div class="filter-container">
     <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增头条新闻</el-button>
     </div>
@@ -41,10 +41,10 @@
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
       </el-table-column>
-     
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+
+      <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '开启' }}
           </el-button>
           <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
@@ -65,7 +65,7 @@
 		  :rows="2"
 		  placeholder="请输入头条内容"
 		  v-model="textarea">
-		</el-input>	
+		</el-input>
         </el-form-item>
         <el-form-item label="跳转链接" prop="page_type">
           <el-input v-if="temp.page_type == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
@@ -80,9 +80,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+        <el-button v-else type="primary" @click="updateData">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -92,7 +92,7 @@
         <el-table-column prop="pv" label="Pv"> </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -293,7 +293,7 @@ export default {
 
     // 修改当前行的状态
     handleModifyStatus(row, status) {
-    
+
 
       this.$message({
         message: '操作成功',

@@ -34,12 +34,12 @@
       <el-table-column width="150px" align="center" label="等级称号">
         <template slot-scope="scope">
           <span>{{scope.row.title}}</span>
-        </template>	
+        </template>
       </el-table-column>
       <el-table-column width="100px" align="center" label="等级图标">
         <template slot-scope="scope">
           <img width="100%" :src="scope.row.icon">
-        </template> 
+        </template>
       </el-table-column>
       <el-table-column min-width="100px" align="center" label="包月价格">
         <template slot-scope="scope">
@@ -55,15 +55,15 @@
         <template slot-scope="scope">
           <span>{{scope.row.freeNums}}单</span>
         </template>
-      </el-table-column>   
-      <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-   <!--  <div class="pagination-container">
+    <!--  <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div> -->
@@ -87,9 +87,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+        <el-button v-else type="primary" @click="updateData">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -99,7 +99,7 @@
         <el-table-column prop="pv" label="Pv"> </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -237,7 +237,7 @@ export default {
       		yearPrize:4888,
       		freeNums:15,
       	}
-      ]	
+      ]
       this.listLoading = false
 
       // fetchList(this.listQuery).then(response => {
