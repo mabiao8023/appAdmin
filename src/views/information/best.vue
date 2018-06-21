@@ -73,12 +73,8 @@
         <el-form-item label="比赛信息" prop="page_type">
           <span>{{ temp.home }} vs {{ temp.away }} </span>
         </el-form-item>
-        <el-form-item label="主队情报" prop="params">
-
-          <el-input  value="普通网页无需输入跳转参数"></el-input>
-        </el-form-item>
-        <el-form-item label="客队情报" prop="params">
-          <el-input value="普通网页无需输入跳转参数"></el-input>
+         <el-form-item label="比赛时间" prop="page_type">
+          <span> {{temp.match_time | parseTime('{y}-{m}-{d} {h}:{i}')}} </span>
         </el-form-item>
         <el-form-item label="排序" prop="params">
           <el-input-number v-model="temp.order_no"></el-input-number>
@@ -170,8 +166,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '编辑轮播图',
-        create: '新增轮播图'
+        update: '编辑情报顺序',
+        create: '新增情报'
       },
       dialogPvVisible: false,
       pvData: [],

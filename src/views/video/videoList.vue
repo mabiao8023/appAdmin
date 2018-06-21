@@ -1,30 +1,6 @@
 <!-- 视频列表模块 -->
 <template>
   <div class="app-container calendar-list-container">
-    <!---->
-   <!---->
-   <!--&lt;!&ndash;  <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增视频</el-button> &ndash;&gt;-->
-
-     <!--<div class="filter-container">-->
-     <!--<el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">-->
-     <!--</el-input>-->
-     <!--<el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">-->
-       <!--<el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">-->
-       <!--</el-option>-->
-     <!--</el-select>-->
-     <!--<el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="$t('table.type')">-->
-       <!--<el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key">-->
-       <!--</el-option>-->
-     <!--</el-select>-->
-     <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
-       <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
-       <!--</el-option>-->
-     <!--</el-select>-->
-     <!--<el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>-->
-     <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
-    <!--&lt;!&ndash;  <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button> &ndash;&gt;-->
-     <!--&lt;!&ndash; <el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox> &ndash;&gt;-->
-   <!--</div>-->
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
@@ -53,7 +29,7 @@
           <el-tag v-for="item in scope.row.categroy">{{ item.name }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="上传者">
+      <el-table-column width="100px" align="center" label="上传者">
         <template slot-scope="scope">
           <span>{{ scope.row.user_name }}</span>
         </template>
@@ -63,12 +39,12 @@
           <span>{{ scope.row.uplateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="排序" sortable >
+      <el-table-column width="100px" align="center" label="排序" sortable >
         <template slot-scope="scope">
           <span>{{ scope.row.order_no }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="是否可用">
+      <el-table-column width="100px" align="center" label="是否可用">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
@@ -82,15 +58,28 @@
           <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-
     </el-table>
+
+    <div class="pagination-container">
+      <el-pagination align="right" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="跳转页面" prop="page_type">
-          <el-select class="filter-item" v-model="temp.page_type" placeholder="请选择跳转页面">
-            <el-option v-for="item in  gotype" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
+
+        <el-form-item label="视频描述" prop="title">
+          <el-input type="textarea"  placeholder="请输入相关描述" v-model="temp.title"></el-input>
+        </el-form-item>
+        <el-form-item  label="视频分类" prop="page_type">
+            <el-checkbox-group align="left" v-model="checkList">
+              <el-checkbox
+                v-for="(item,index) in gotype"
+                :label="item.key"
+                :checked="isChecked(item.key) ? true : false"
+                >{{item.display_name}}
+              </el-checkbox>
+            </el-checkbox-group>
         </el-form-item>
         <el-form-item label="展示图片" prop="img_url">
           <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
@@ -133,17 +122,12 @@ import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
 
-// 页面跳转类型
+// 视频分类列表
 
 const gotype = [
-  { key: '1', display_name: '普通网页' },
-  { key: '2', display_name: '推荐单页面' },
-  { key: '3', display_name: '分析师页面' },
-  { key: '4', display_name: '课程列表页面' },
-  { key: '5', display_name: '课程购买页面' },
-  { key: '6', display_name: '视频列表页面' },
-  { key: '7', display_name: '会员升级页面' },
-  { key: '8', display_name: '绑定手机页面' },
+  { key: '1', display_name: '不可描述' },
+  { key: '2', display_name: '全部干货' },
+  { key: '3', display_name: '其他分类' }
 ]
 
 // arr to obj ,such as { CN : "China", US : "USA" }
@@ -206,7 +190,7 @@ export default {
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        title: [{ required: false, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
 
@@ -226,7 +210,9 @@ export default {
           url:'',
           paramsId:'...',
         }
-      ]
+      ],
+      /* 复选框选中的列表,内容为选中的id */
+      checkList:[]
     }
   },
   filters: {
@@ -246,6 +232,19 @@ export default {
     this.getList()
   },
   methods: {
+    /* 是否选中分类的列表 */
+    isChecked( id ){
+      let flag = false;
+      if( this.temp.categroy && this.temp.categroy.length ){
+           this.temp.categroy.forEach( val => {
+            if( val.id == id ){
+              flag = true;
+            }
+          } );
+      }
+
+      return flag;
+    },
     // 上传图片的组件生成的图片
     uploadImg(url){
         console.log('url:' + url)
@@ -310,6 +309,7 @@ export default {
           status:1,
         }
       ]
+      this.total = 10
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
       //   this.total = response.data.total

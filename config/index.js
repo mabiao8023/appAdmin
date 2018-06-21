@@ -10,7 +10,17 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+        '/': {
+                // 代理到测试服
+                target: 'https://api-qiuwen.ym8800.com',
+                secure: false,
+
+                // 搞了半天。。target为具体域名，而非ip地址的形式时，这个属性必须为true
+                // 参见：https://github.com/chimurai/http-proxy-middleware
+                changeOrigin: true
+        }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

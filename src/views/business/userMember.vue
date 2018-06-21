@@ -19,14 +19,19 @@
           <img width="100%" :src="scope.row.icon">
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="包月价格">
+      <el-table-column min-width="100px" align="center" label="1月价格">
         <template slot-scope="scope">
           <span>{{scope.row.monthPrize}}元</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="包年价格">
+      <el-table-column min-width="100px" align="center" label="3月价格">
         <template slot-scope="scope">
-          <span>{{scope.row.yearPrize}}元</span>
+          <span>{{scope.row.monthPrize}}元</span>
+        </template>
+      </el-table-column>
+      <el-table-column min-width="100px" align="center" label="1年价格">
+        <template slot-scope="scope">
+          <span>{{scope.row.monthPrize}}元</span>
         </template>
       </el-table-column>
       <el-table-column min-width="150px" align="center" label="免费查看单数">
@@ -59,11 +64,14 @@
         <el-form-item label="等级图标" prop="icon">
           <uploadImg :imgUrl="temp.icon" @input="uploadImg"></uploadImg>
         </el-form-item>
-        <el-form-item label="包月价格（元）" prop="monthPrize">
+        <el-form-item label="1月价格（元）" prop="monthPrize">
           <el-input-number v-model="temp.monthPrize"></el-input-number>
         </el-form-item>
-        <el-form-item label="包年价格（元）" prop="yearPrize">
-          <el-input-number v-model="temp.yearPrize"></el-input-number>
+        <el-form-item label="3月价格（元）" prop="monthPrize">
+          <el-input-number v-model="temp.monthPrize"></el-input-number>
+        </el-form-item>
+        <el-form-item label="1年价格（元）" prop="monthPrize">
+          <el-input-number v-model="temp.monthPrize"></el-input-number>
         </el-form-item>
         <el-form-item label="免费查看单数（单）" prop="freeNums">
           <el-input-number v-model="temp.freeNums"></el-input-number>

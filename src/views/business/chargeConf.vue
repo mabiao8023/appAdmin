@@ -5,7 +5,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="tip">
-    	充值单位为“福卡”,与人民币比例为1：1兑换。
+    	充值单位为“球币”,与人民币比例为1：1兑换。
     </div>
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
@@ -24,12 +24,7 @@
           <span>{{scope.row.money}}元</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="赠送数目">
-        <template slot-scope="scope">
-          <span>{{scope.row.give}}元</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" align="center" label="赠送饭票数">
+      <el-table-column min-width="150px" align="center" label="赠送球票数">
         <template slot-scope="scope">
           <span>{{scope.row.ticket}}张</span>
         </template>
@@ -61,9 +56,9 @@
         <el-form-item label="充值数目" prop="money">
           <el-input-number v-model="temp.money"></el-input-number>
         </el-form-item>
-        <el-form-item label="赠送数目" prop="give">
+      <!--   <el-form-item label="赠送数目" prop="give">
           <el-input-number v-model="temp.give"></el-input-number>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="赠送饭票数" prop="ticket">
           <el-input-number v-model="temp.ticket"></el-input-number>
         </el-form-item>

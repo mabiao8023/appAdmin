@@ -6,9 +6,9 @@
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="排序" width="65">
+      <el-table-column align="center" label="推送id" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.banner_no}}</span>
+          <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="页面名称">
@@ -16,9 +16,9 @@
           <span>{{ scope.row.page_type | typeFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="auto" class="img-show" align="center" label="展示图片">
+      <el-table-column align="center" label="推送内容" width="400">
         <template slot-scope="scope">
-          <img :src="scope.row.img_url">
+          <span>{{scope.row.text}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="跳转链接">
@@ -33,7 +33,7 @@
       </el-table-column>
       <el-table-column width="150px" align="center" label="是否可用">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
+          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '已推送' : '未推送'}}</el-tag>
         </template>
       </el-table-column>
 
@@ -175,7 +175,8 @@ export default {
 
       bannerRulesList:[
         {
-          title:'普通网页',
+          id:1,
+          文本:'普通网页',
           url:'www.baidu.com',
           paramsId:'',
         },
@@ -222,40 +223,36 @@ export default {
       this.list = [
         {
           id:1,
-          banner_no:1,
-          page_type:1,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
+          page_type:2, /* 推送的页面类型 */
           url:'www.baidu.com',
           params:'',
           status:1,
         },
         {
-          id:2,
-          banner_no:2,
-          page_type:2,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:2,
+          id:1,
+          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
+          page_type:2, /* 推送的页面类型 */
+          url:'www.baidu.com',
+          params:'',
           status:1,
         },
         {
-          id:3,
-          banner_no:3,
-          page_type:3,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:3,
+          id:1,
+          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
+          page_type:2, /* 推送的页面类型 */
+          url:'www.baidu.com',
+          params:'',
           status:1,
         },
         {
-          id:4,
-          banner_no:4,
-          page_type:4,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:4,
+          id:1,
+          text:'【稳赢】今天是多架飞机搜积分吧数据地方解决四地市',
+          page_type:2, /* 推送的页面类型 */
+          url:'www.baidu.com',
+          params:'',
           status:1,
-        }
+        },
       ]
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
