@@ -3,7 +3,7 @@
     <div class="filter-container">
     <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增广告</el-button>
     </div>
-    
+
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
     :default-sort = "{prop: 'banner_no', order: 'ascending'}"
       style="width: 100%">
@@ -32,10 +32,10 @@
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
       </el-table-column>
-     
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+
+      <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '启用' }}
           </el-button>
           <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
@@ -47,7 +47,7 @@
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
         <el-form-item label="广告描述" prop="title">
            <el-input placeholder="广告描述" v-model="temp.title"></el-input>
-        </el-form-item>  
+        </el-form-item>
         <el-form-item label="广告图片" prop="img_url">
           <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
         </el-form-item>
@@ -56,9 +56,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确认</el-button>
+        <el-button v-else type="primary" @click="updateData">确认</el-button>
       </div>
     </el-dialog>
 
@@ -171,7 +171,7 @@ export default {
       })
       row.status = status
     },
-    
+
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -260,7 +260,7 @@ export default {
       this.list.splice(index, 1)
     },
 
-  
+
     // 格式化Json
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

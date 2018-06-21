@@ -50,7 +50,7 @@ export default {
     this.addViewTags()
   },
   methods: {
-    generateTitle, // generateTitle by vue-i18n
+//    generateTitle, // generateTitle by vue-i18n
     generateRoute() {
       if (this.$route.name) {
         return this.$route

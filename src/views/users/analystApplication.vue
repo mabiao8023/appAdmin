@@ -49,7 +49,7 @@
           <span>{{scope.row.jifen}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="auto" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">同意</el-button>
           <el-button v-if="scope.row.status!='published'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'published')">拒绝
@@ -61,6 +61,7 @@
   <!--</div>-->
   <div>
     分析师申请
+  </div>
   </div>
 </template>
 

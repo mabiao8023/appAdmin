@@ -164,13 +164,13 @@ export const asyncRouterMap = [
       path: '/recommend',
       component: Layout,
       redirect: 'noredirect',
-      name: 'recommend',
+      name: '推荐列表',
       meta: {
-        title: 'video',
+        title: '推荐列表',
         icon: 'icon'
       },
       children: [
-        { path: 'list', component: _import('recommend/list'), name: 'recommendList', meta: { title: 'recommendList' }},
+        { path: 'list', component: _import('recommend/list'), name: '推荐列表', meta: { title: '推荐列表',icon: 'icon' }},
       ]
     },
 

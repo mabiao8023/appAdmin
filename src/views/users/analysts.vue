@@ -60,14 +60,15 @@
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '正常' : '下架'}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="auto" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{$t('table.publish')}}
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">发布
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+  </div>
 </template>
 
 <script>

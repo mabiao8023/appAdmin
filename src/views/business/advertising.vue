@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('table.actions')" width="230px" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '开启' }}
