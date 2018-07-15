@@ -12,14 +12,19 @@
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="广告描述">
+     <!--  <el-table-column width="150px" align="center" label="广告描述">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column width="auto" class="img-show" align="center" label="展示图片">
         <template slot-scope="scope">
           <img :src="scope.row.img_url">
+        </template>
+      </el-table-column>
+      <el-table-column width="150px" align="center" label="跳转页面">
+        <template slot-scope="scope">
+          <span>{{scope.row.name || '无'}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="跳转链接">
@@ -27,6 +32,11 @@
           <span>{{scope.row.url || '无'}}</span>
         </template>
       </el-table-column>
+      <!--      <el-table-column width="150px" align="center" label="跳转参数">
+        <template slot-scope="scope">
+          <span>{{scope.row.params || '无'}}</span>
+        </template>
+      </el-table-column> -->
       <el-table-column width="150px" align="center" label="是否可用">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
@@ -38,21 +48,21 @@
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '启用' }}
           </el-button>
-          <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>
+          <!-- <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="广告描述" prop="title">
+        <!-- <el-form-item label="广告描述" prop="title">
            <el-input placeholder="广告描述" v-model="temp.title"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="广告图片" prop="img_url">
           <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
         </el-form-item>
         <el-form-item label="跳转链接" prop="url">
-          <el-input v-model="temp.url"  value="普通网页无需输入跳转链接"></el-input>
+          <el-input v-model="temp.url"  value="请输入跳转链接"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -66,7 +76,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, fetchAdvister, createAdvister, updateAdvister,deleteAdvister } from '@/api/advister'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
@@ -120,41 +130,42 @@ export default {
     getList() {
       this.listLoading = true
       this.listLoading = false
-      this.list = [
-        {
-          id:1,
-          title:'广告位的描述：谁的广告',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          status:1,
-        },
-        {
-          id:1,
-          title:'广告位的描述：谁的广告',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          status:1,
-        },
-        {
-          id:1,
-          title:'广告位的描述：谁的广告',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          status:1,
-        },
-        {
-          id:1,
-          title:'广告位的描述：谁的广告',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          status:1,
-        },
-      ]
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+      // this.list = [
+      //   {
+      //     id:1,
+      //     title:'广告位的描述：谁的广告',
+      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+      //     url:'www.baidu.com',
+      //     status:1,
+      //   },
+      //   {
+      //     id:1,
+      //     title:'广告位的描述：谁的广告',
+      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+      //     url:'www.baidu.com',
+      //     status:1,
+      //   },
+      //   {
+      //     id:1,
+      //     title:'广告位的描述：谁的广告',
+      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+      //     url:'www.baidu.com',
+      //     status:1,
+      //   },
+      //   {
+      //     id:1,
+      //     title:'广告位的描述：谁的广告',
+      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
+      //     url:'www.baidu.com',
+      //     status:1,
+      //   },
+      // ]
+      fetchList(this.listQuery).then(response => {
+        console.log(response)
+        this.list = response.data.data.list
+        this.total = response.data.data.meta.total
+        this.listLoading = false
+      })
     },
 
     // 修改当前行的状态
