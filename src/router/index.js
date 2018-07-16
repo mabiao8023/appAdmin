@@ -80,8 +80,8 @@ export const asyncRouterMap = [
           { path: 'entry', component: _import('business/entry'), name: '启动页配置', meta: { title: '启动页配置' }},
           { path: 'banner', component: _import('business/banner'), name: '首页轮播图配置', meta: { title: '首页轮播图配置' }},
           { path: 'marquee', component: _import('business/marquee'), name: '球稳头条配置', meta: { title: '球稳头条配置' }},
-          { path: 'advertising', component: _import('business/advertising'), name: '广告位配置', meta: { title: '广告位配置' }},
-          { path: 'adList/:id', component: _import('business/adList'), name: '广告列表', meta: { title: '广告列表' }},
+          // { path: 'advertising', component: _import('business/advertising'), name: '广告位配置', meta: { title: '广告位配置' }},
+          { path: 'adList', component: _import('business/adList'), name: '广告列表', meta: { title: '广告列表' }},
           { path: 'push', component: _import('business/push'), name: '推送配置', meta: { title: '推送配置' }},
       ]
     },

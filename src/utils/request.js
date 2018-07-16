@@ -1,19 +1,21 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import { getToken } from '@/utils/auth'
 import Qs from 'qs'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
-  timeout: 5000, // request timeout
+    baseURL: process.env.BASE_API, // api的base_url
+    timeout: 5000, // request timeout
     // #这时候我们通过Qs.stringify转换为表单查询参数
-    // transformRequest: [function (data) {
+    // transformRequest: [function (data,headers) {
+    //     console.log(  headers )
+    //
     //     data = Qs.stringify(data);
     //     return data;
     // }],
-    // // #设置Content-Type
+    // #设置Content-Type
     // headers:{'Content-Type':'application/x-www-form-urlencoded'}
 })
 

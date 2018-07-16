@@ -7,16 +7,16 @@
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
     :default-sort = "{prop: 'banner_no', order: 'ascending'}"
       style="width: 100%">
-      <el-table-column align="center" prop="id" label="排序" width="100">
+      <el-table-column align="center" prop="id" label="广告id" width="100">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-     <!--  <el-table-column width="150px" align="center" label="广告描述">
+      <el-table-column align="center" prop="id" label="排序" width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.title }}</span>
+          <span>{{scope.row.sort}}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column width="auto" class="img-show" align="center" label="展示图片">
         <template slot-scope="scope">
           <img :src="scope.row.img_url">
@@ -46,7 +46,7 @@
       <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-         <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '启用' }}
+          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '启用' }}
           </el-button>
           <!-- <el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button> -->
         </template>
@@ -55,11 +55,11 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item label="广告描述" prop="title">
-           <el-input placeholder="广告描述" v-model="temp.title"></el-input>
-        </el-form-item> -->
         <el-form-item label="广告图片" prop="img_url">
           <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="temp.sort"></el-input-number>
         </el-form-item>
         <el-form-item label="跳转链接" prop="url">
           <el-input v-model="temp.url"  value="请输入跳转链接"></el-input>
@@ -71,7 +71,6 @@
         <el-button v-else type="primary" @click="updateData">确认</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -103,9 +102,12 @@ export default {
       },
       temp:{
         id: undefined,
-        title: '',
+        page_id: '1',
         img_url:'',
-        url:''
+        url:'',
+        sort: 0,
+        status: 1,
+        params: 0
       },
       dialogPvVisible: false,
       rules: {
@@ -116,80 +118,44 @@ export default {
     }
   },
   created() {
-    let id = this.$route.params.id;
-    this.getList()
+      this.getList()
   },
   methods: {
     // 上传图片的组件生成的图片
     uploadImg(url){
-        console.log('url:' + url)
-
-          this.temp.img_url = url
+        this.temp.img_url = url
     },
     // 获得全部的列表
     getList() {
-      this.listLoading = true
-      this.listLoading = false
-      // this.list = [
-      //   {
-      //     id:1,
-      //     title:'广告位的描述：谁的广告',
-      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-      //     url:'www.baidu.com',
-      //     status:1,
-      //   },
-      //   {
-      //     id:1,
-      //     title:'广告位的描述：谁的广告',
-      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-      //     url:'www.baidu.com',
-      //     status:1,
-      //   },
-      //   {
-      //     id:1,
-      //     title:'广告位的描述：谁的广告',
-      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-      //     url:'www.baidu.com',
-      //     status:1,
-      //   },
-      //   {
-      //     id:1,
-      //     title:'广告位的描述：谁的广告',
-      //     img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-      //     url:'www.baidu.com',
-      //     status:1,
-      //   },
-      // ]
-      fetchList(this.listQuery).then(response => {
-        console.log(response)
-        this.list = response.data.data.list
-        this.total = response.data.data.meta.total
+        this.listLoading = true
         this.listLoading = false
-      })
-    },
-
-    // 修改当前行的状态
-    handleModifyStatus(row, status) {
-      if( !row.status && this.list.some( val => val.status )){
-        return this.$message({
-          message: '启动页面只能开启一个，如需开启请先冻结其他',
-          type: 'error'
+        fetchList(this.listQuery).then(response => {
+            this.list = response.data.data.list
+            this.total = response.data.data.meta.total
+            this.listLoading = false
         })
-      }
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
+    },
+    // 修改当前行的状态
+    handleModifyStatus( row ) {
+      deleteAdvister( row ).then( res => {
+          this.getList();
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
+      } )
     },
 
     resetTemp() {
-      this.temp = {
-        id: undefined,
-        title: '',
-        img_url:'',
-        url:''
-      }
+        this.temp = {
+            id: undefined,
+            page_id: '1',
+            img_url:'',
+            url:'',
+            sort: 0,
+            status: 1,
+            params: 0
+        }
     },
 
     // 新增数据初始化
@@ -198,7 +164,7 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+          this.$refs['dataForm'].clearValidate()
       })
     },
 
@@ -206,10 +172,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
+          createAdvister(this.temp).then(() => {
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -225,11 +189,10 @@ export default {
     // 设置当前编辑窗口
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+          this.$refs['dataForm'].clearValidate()
       })
     },
 
@@ -238,15 +201,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
+          updateAdvister(tempData).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -258,20 +213,6 @@ export default {
         }
       })
     },
-
-    // 删除列表
-    handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
-    },
-
-
     // 格式化Json
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

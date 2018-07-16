@@ -3,24 +3,29 @@
     <!-- banner配置规则 -->
 
     <div class="filter-container">
-    <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增轮播图</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增轮播图</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
 
     :default-sort = "{prop: 'banner_no', order: 'ascending'}"
       style="width: 100%">
+      <el-table-column align="center" sortable prop="banner_no" label="轮播图id" width="100">
+        <template slot-scope="scope">
+          <span>{{scope.row.id}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" sortable prop="banner_no" label="排序" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.banner_no}}</span>
+          <span>{{scope.row.sort}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="页面名称">
         <template slot-scope="scope">
-          <span>{{ scope.row.page_type | typeFilter }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="auto" class="img-show" align="center" label="展示图片">
+      <el-table-column width="auto" class="img-show" align="center" label="图片">
         <template slot-scope="scope">
           <img :src="scope.row.img_url">
         </template>
@@ -95,7 +100,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, createBanner, updateBanner, deleteAdvister } from '@/api/banner'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
@@ -112,12 +117,6 @@ const gotype = [
   { key: '7', display_name: '会员升级页面' },
   { key: '8', display_name: '绑定手机页面' },
 ]
-
-// arr to obj ,such as { CN : "China", US : "USA" }
-/*const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})*/
 
 const goTypeKeyValue = gotype.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -215,59 +214,18 @@ export default {
   methods: {
     // 上传图片的组件生成的图片
     uploadImg(url){
-        console.log('url:' + url)
-
-          this.temp.img_url = url
+        this.temp.img_url = url
     },
   	// 获得全部的列表
     getList() {
       this.listLoading = true
       this.listLoading = false
-      this.list = [
-        {
-          id:1,
-          banner_no:1,
-          page_type:1,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'www.baidu.com',
-          params:'',
-          status:1,
-        },
-        {
-          id:2,
-          banner_no:2,
-          page_type:2,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:2,
-          status:1,
-        },
-        {
-          id:3,
-          banner_no:3,
-          page_type:3,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:3,
-          status:1,
-        },
-        {
-          id:4,
-          banner_no:4,
-          page_type:4,
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          url:'',
-          params:4,
-          status:1,
-        }
-      ]
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+       fetchList().then(response => {
+         this.list = response.data.data.list
+         this.total = response.data.data.meta.total
+         this.listLoading = false
+       })
     },
-
     // 页码过滤
     handleFilter() {
       this.listQuery.page = 1
