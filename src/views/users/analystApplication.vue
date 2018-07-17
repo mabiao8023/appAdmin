@@ -13,75 +13,76 @@
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
+      <el-table-column width="60px" align="center" label="头像">
+        <template slot-scope="scope">
+          <img style="width:40px;height:40px;border-radius: 50%;" :src="scope.row.avatar"/>
+        </template>
+      </el-table-column>
       <el-table-column min-width="80px" label="昵称">
        <template slot-scope="scope">
           <span>{{scope.row.nickname}}</span>
         </template>
       </el-table-column>
-
-      <el-table-column width="60px" align="center" label="头像">
+      <el-table-column min-width="60px" label="性别">
         <template slot-scope="scope">
-          <span>{{scope.row.avatar}}</span>
+          <span>{{scope.row.sex}}</span>
         </template>
       </el-table-column>
+      <el-table-column min-width="60px" label="球龄">
+        <template slot-scope="scope">
+          <span>{{scope.row.ball_year}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="100px" align="center" label="头衔">
         <template slot-scope="scope">
-          <span>{{scope.row.job_title}}</span>
+          <span>{{scope.row.tag}}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="简介">
         <template slot-scope="scope">
-          <span>{{scope.row.desc}}</span>
+          <span>{{scope.row.intro}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="擅长参考">
         <template slot-scope="scope">
-          <span>{{scope.row.money}}</span>
+          <span>{{scope.row.good_at}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="擅长技能">
         <template slot-scope="scope">
-          <span>{{scope.row.jifen}}</span>
+          <span>{{scope.row.skill}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="擅长联赛">
         <template slot-scope="scope">
-          <span>{{scope.row.jifen}}</span>
+          <span>{{scope.row.league}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
+      <el-table-column width="100px" align="center" label="是否可用">
         <template slot-scope="scope">
+          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '已同意' : scope.row.status == 2 ? '未通过审核' : '未审核'}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="200px" class-name="small-padding fixed-width">
+        <template slot-scope="scope" v-if="scope.row.status == 0">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">同意</el-button>
           <el-button v-if="scope.row.status!='published'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'published')">拒绝
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-
-  <!--</div>-->
-  <div>
-    分析师申请
-  </div>
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, fetchApplication, passApplication, refuseApplication } from '@/api/analystApplication'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
-
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
-
-// arr to obj ,such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
 
 export default {
   name: 'complexTable',
@@ -97,16 +98,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
-      showReviewer: false,
       temp: {
         id: undefined,
         importance: 1,
@@ -122,27 +114,7 @@ export default {
         update: 'Edit',
         create: 'Create'
       },
-      dialogPvVisible: false,
-      pvData: [],
-      rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
       downloadLoading: false
-    }
-  },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
     }
   },
   created() {
@@ -151,46 +123,11 @@ export default {
   methods: {
     getList() {
       this.listLoading = false;
-      this.list = [{
-          id:1,
-          nickname:'滴滴',
-          sex:'男',
-          avatar:'默认头像',
-          phone:'1782374832',
-          creat_time:'2018-5-18',
-          type:1,
-          level:'等级3',
-          expired:'180天',
-          money:'1888',
-          jifen:'8888',
-          status:1,
-          job_title:'天下第一',
-          desc:'素冠荷鼎上课的时候国际化的风格的卡卡是的开个会卡死',
-          ball_age:'30年以上',
-          like_league:'擅长联赛',
-          like_skill:'擅长技能',
-          like_look:'擅长参考',
-      },
-        {
-          id:1,
-          nickname:'滴滴',
-          sex:'男',
-          avatar:'默认头像',
-          phone:'1782374832',
-          creat_time:'2018-5-18',
-          type:1,
-          level:'等级3',
-          expired:'180天',
-          money:'1888',
-          jifen:'8888',
-          status:0,
-      }
-      ];
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+       fetchList(this.listQuery).then(response => {
+         this.list = response.data.list
+         this.total = response.data.meta.total
+         this.listLoading = false
+       })
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -205,11 +142,13 @@ export default {
       this.getList()
     },
     handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
+      refuseApplication( row ).then( res => {
+        this.getList();
+        this.$message({
+          message: '已拒绝',
+          type: 'success'
+        })
+      } )
     },
     resetTemp() {
       this.temp = {
@@ -233,8 +172,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
           createArticle(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -248,63 +185,19 @@ export default {
         }
       })
     },
+    // 通过申请
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel(tHeader, data, 'table-list')
-        this.downloadLoading = false
+      this.temp = Object.assign({}, row)
+      const tempData = Object.assign({}, this.temp)
+      passApplication(tempData).then(() => {
+        this.getList()
+        this.dialogFormVisible = false
+        this.$notify({
+          title: '成功',
+          message: '同意申请',
+          type: 'success',
+          duration: 2000
+        })
       })
     },
     formatJson(filterVal, jsonData) {

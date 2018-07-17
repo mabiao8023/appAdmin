@@ -20,14 +20,27 @@ const userMap = {
 export default {
   loginByUsername: config => {
     const { username } = JSON.parse(config.body)
-    return userMap[username]
+    let res = {
+      code: 1,
+      msg: '登录成功',
+      data: userMap[username]
+    }
+    return res
   },
   getUserInfo: config => {
     const { token } = param2Obj(config.url)
     if (userMap[token]) {
-      return userMap[token]
+      return {
+        code: 1,
+        msg: '登录成功',
+        data: userMap[token]
+      }
     } else {
-      return false
+      return {
+        code: 0,
+        msg: '获取用户信息失败',
+        data: {}
+      }
     }
   },
   logout: () => 'success'

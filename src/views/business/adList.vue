@@ -202,6 +202,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           updateAdvister(tempData).then(() => {
+            this.getList();
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

@@ -16,34 +16,29 @@
       </el-table-column>
       <el-table-column width="auto" class="img-show" align="center" label="首屏图片">
         <template slot-scope="scope">
-          <img :src="scope.row.img_url">
+          <img style="width:100px;" :src="scope.row.img_url">
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="视频链接">
         <template slot-scope="scope">
-          <a :href="scope.row.video" target="view_window">{{scope.row.video}}</a>
+          <a :href="scope.row.url" target="view_window">{{scope.row.url}}</a>
         </template>
       </el-table-column>
-      <el-table-column width="150px" sortable align="center" label="视频分类">
+      <el-table-column width="100px" align="center" label="播放数">
         <template slot-scope="scope">
-          <el-tag v-for="item in scope.row.categroy">{{ item.name }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column width="100px" align="center" label="上传者">
-        <template slot-scope="scope">
-          <span>{{ scope.row.user_name }}</span>
+          <span>{{ scope.row.viewer }}</span>
         </template>
       </el-table-column>
       <el-table-column width="150px" align="center" label="上传时间" sortable>
         <template slot-scope="scope">
-          <span>{{ scope.row.uplateTime }}</span>
+          <span>{{ scope.row.update_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" label="排序" sortable >
-        <template slot-scope="scope">
-          <span>{{ scope.row.order_no }}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column width="100px" align="center" label="排序" sortable >-->
+        <!--<template slot-scope="scope">-->
+          <!--<span>{{ scope.row.order_no }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column width="100px" align="center" label="是否可用">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
@@ -117,7 +112,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { getCateVideo, addCateVideo, updateCateVideo, deleteCateVideo } from '@/api/video'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
@@ -159,6 +154,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        cate_id: 1,
         importance: undefined,
         title: undefined,
         type: undefined,
@@ -193,24 +189,6 @@ export default {
         title: [{ required: false, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
-
-      bannerRulesList:[
-        {
-          title:'普通网页',
-          url:'www.baidu.com',
-          paramsId:'',
-        },
-        {
-          title:'推荐页面',
-          url:'',
-          paramsId:'5',
-        },
-        {
-          title:'其他',
-          url:'',
-          paramsId:'...',
-        }
-      ],
       /* 复选框选中的列表,内容为选中的id */
       checkList:[]
     }
@@ -255,66 +233,12 @@ export default {
     getList() {
       this.listLoading = true
       this.listLoading = false
-      this.list = [
-        {
-          id:1,
-          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
-          user_name:'天下第一',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
-          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
-          order_no:1,
-          plays:8888,
-          zan:8888,
-          uplateTime:'2018-01-12 18:36',
-          status:1,
-        },
-        {
-          id:1,
-          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
-          user_name:'天下第一',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
-          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
-          order_no:1,
-          plays:8888,
-          zan:8888,
-          uplateTime:'2018-01-12 18:36',
-          status:1,
-        },
-        {
-          id:1,
-          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
-          user_name:'天下第一',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
-          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
-          order_no:1,
-          plays:8888,
-          zan:8888,
-          uplateTime:'2018-01-12 18:36',
-          status:1,
-        },
-        {
-          id:1,
-          title:'非常好的一个视频，好好看看，什么都不会说的？？？？',
-          user_name:'天下第一',
-          img_url:'https://a.ym8800.com/upload/8d69197cca28b7bafed3548c44f6b72a.jpg',
-          video:'http://v3.mukewang.com/jiuyeban/58c20168e520e59d7f8b459b/H.mp4',
-          categroy:[{id:1,name:'不可描述'},{id:2,name:'干货专题'}],
-          order_no:1,
-          plays:8888,
-          zan:8888,
-          uplateTime:'2018-01-12 18:36',
-          status:1,
-        }
-      ]
-      this.total = 10
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+      this.listQuery.cate_id = this.$route.params.id
+      getCateVideo(this.listQuery).then(response => {
+         this.list = response.data.list
+         this.total = response.data.meta.total
+         this.listLoading = false
+      })
     },
 
     // 页码过滤

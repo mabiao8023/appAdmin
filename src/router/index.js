@@ -73,11 +73,11 @@ export const asyncRouterMap = [
         icon: 'component'
       },
       children: [
-          { path: 'system', component: _import('business/system'), name: '每日登录配置', meta: { title: '每日登录配置' }},
+          // { path: 'system', component: _import('business/system'), name: '每日登录配置', meta: { title: '每日登录配置' }},
           { path: 'userMember', component: _import('business/userMember'), name: '用户会员等级配置', meta: { title: '用户会员等级配置' }},
           { path: 'analystsMember', component: _import('business/analystsMember'), name: '分析师等级配置', meta: { title: '分析师等级配置' }},
           { path: 'chargeConf', component: _import('business/chargeConf'), name: '用户充值配置', meta: { title: '用户充值配置' }},
-          { path: 'entry', component: _import('business/entry'), name: '启动页配置', meta: { title: '启动页配置' }},
+          // { path: 'entry', component: _import('business/entry'), name: '启动页配置', meta: { title: '启动页配置' }},
           { path: 'banner', component: _import('business/banner'), name: '首页轮播图配置', meta: { title: '首页轮播图配置' }},
           { path: 'marquee', component: _import('business/marquee'), name: '球稳头条配置', meta: { title: '球稳头条配置' }},
           // { path: 'advertising', component: _import('business/advertising'), name: '广告位配置', meta: { title: '广告位配置' }},
@@ -141,8 +141,8 @@ export const asyncRouterMap = [
         { path: 'recharge', component: _import('trading/recharge'), name: '充值记录', meta: { title: '充值记录' }},
         { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: '购买记录', meta: { title: '购买记录' }},
         { path: 'analystBilling', component: _import('trading/analystBilling'), name: '分析师发单记录', meta: { title: '分析师发单记录' }},
-        { path: 'analystShare', component: _import('trading/analystShare'), name: '分析师分成记录', meta: { title: '分析师分成记录' }},
-        { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: '分析师积分记录', meta: { title: '分析师积分记录' }},
+        // { path: 'analystShare', component: _import('trading/analystShare'), name: '分析师分成记录', meta: { title: '分析师分成记录' }},
+        // { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: '分析师积分记录', meta: { title: '分析师积分记录' }},
       ]
     },
 
@@ -157,7 +157,8 @@ export const asyncRouterMap = [
       },
       children: [
         { path: 'videoCategory', component: _import('video/videoCategory'), name: '视频分类', meta: { title: '视频分类' }},
-        { path: 'videoList', component: _import('video/videoList'), name: '视频列表', meta: { title: '视频列表' }},
+        { path: 'videoList/:id', component: _import('video/videoList'), name: '视频列表', meta: { title: '视频列表' }},
+        { path: 'uploadVideoList', component: _import('video/uploadVideoList'), name: '上传视频', meta: { title: '上传视频' }},
       ]
     },
     {

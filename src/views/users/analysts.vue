@@ -68,11 +68,12 @@
         </template>
       </el-table-column>
     </el-table>
+
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList } from '@/api/analysts'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -156,43 +157,12 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = false;
-      this.list = [{
-          id:1,
-          nickname:'滴滴',
-          sex:'男',
-          avatar:'默认头像',
-          phone:'1782374832',
-          creat_time:'2018-5-18',
-          type:1,
-          level:'等级3',
-          expired:'180天',
-          money:'1888',
-          jifen:'8888',
-          status:1,
-          job_title:'天下第一',
-          desc:'素冠荷鼎上课的时候国际化的风格的卡卡是的开个会卡死'
-      },
-        {
-          id:1,
-          nickname:'滴滴',
-          sex:'男',
-          avatar:'默认头像',
-          phone:'1782374832',
-          creat_time:'2018-5-18',
-          type:1,
-          level:'等级3',
-          expired:'180天',
-          money:'1888',
-          jifen:'8888',
-          status:0,
-      }
-      ];
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+        this.listLoading = false;
+         fetchList(this.listQuery).then(response => {
+             this.list = response.data.list
+             this.total = response.data.meta.total
+             this.listLoading = false
+         })
     },
     handleFilter() {
       this.listQuery.page = 1

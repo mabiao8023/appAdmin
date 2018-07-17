@@ -1,47 +1,47 @@
+<!-- 视频列表模块 -->
 <template>
   <div class="app-container calendar-list-container">
-    <!-- banner配置规则 -->
-
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增轮播图</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增视频</el-button>
     </div>
-
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
-
-    :default-sort = "{prop: 'banner_no', order: 'ascending'}"
       style="width: 100%">
-      <el-table-column align="center" prop="id" label="轮播图id" width="80">
+      <el-table-column align="center" label="视频id" width="65">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" sortable prop="sort" label="排序" width="100">
+      <el-table-column width="150px" align="center" label="视频描述">
         <template slot-scope="scope">
-          <span>{{scope.row.sort}}</span>
+          <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="auto" class="img-show" align="center" label="图片">
+      <el-table-column width="auto" class="img-show" align="center" label="首屏图片">
         <template slot-scope="scope">
-          <img :src="scope.row.img_url">
+          <img style="width:100px;" :src="scope.row.img_url">
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转页面名称">
+      <el-table-column width="150px" align="center" label="视频链接">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <a :href="scope.row.url" target="view_window">{{scope.row.url}}</a>
         </template>
       </el-table-column>
-
-      <el-table-column width="150px" align="center" label="跳转链接">
+      <el-table-column width="100px" align="center" label="播放数">
         <template slot-scope="scope">
-          <span>{{scope.row.url || '无'}}</span>
+          <span>{{ scope.row.viewer }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="跳转参数">
+      <el-table-column width="150px" align="center" label="上传时间" sortable>
         <template slot-scope="scope">
-          <span>{{scope.row.params || '无'}}</span>
+          <span>{{ scope.row.update_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="是否可用">
+      <!--<el-table-column width="100px" align="center" label="排序" sortable >-->
+        <!--<template slot-scope="scope">-->
+          <!--<span>{{ scope.row.order_no }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <el-table-column width="100px" align="center" label="是否可用">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
@@ -51,31 +51,33 @@
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '开启' }}
-          </el-button></template>
+          </el-button>
+          <!--<el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>-->
+        </template>
       </el-table-column>
     </el-table>
 
+    <div class="pagination-container">
+      <el-pagination align="right" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="跳转页面" prop="page_id">
-          <el-select class="filter-item" v-model="temp.page_id" placeholder="请选择跳转页面">
-            <el-option v-for="item in  gotype" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
+        <el-form-item label="视频描述" prop="title">
+          <el-input type="textarea"  placeholder="请输入相关描述" v-model="temp.title"></el-input>
         </el-form-item>
         <el-form-item label="展示图片" prop="img_url">
           <uploadImg :imgUrl="temp.img_url" @input="uploadImg"></uploadImg>
         </el-form-item>
-        <el-form-item label="跳转链接" prop="page_type">
-          <el-input v-if="temp.page_id == 1" placeholder="请输入链接，如：www.baidu.com" v-model="temp.url"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转链接"></el-input>
+        <el-form-item label="视频链接" prop="url">
+          <uploadVideo :imgUrl="temp.url" @input="uploadVideo"></uploadVideo>
         </el-form-item>
-        <el-form-item label="跳转参数" prop="params">
-          <el-input v-if="temp.page_id != 1" placeholder="请输入参数，如：课程id，推荐单id，分析师id"  v-model="temp.params"></el-input>
-          <el-input v-else disabled value="普通网页无需输入跳转参数"></el-input>
+        <el-form-item label="视频时长" prop="url">
+          <el-input-number v-model="temp.times"></el-input-number>
         </el-form-item>
-        <el-form-item label="轮播排序" prop="params">
-          <el-input-number v-model="temp.sort"></el-input-number>
+        <el-form-item label="播放量" prop="viewer">
+          <el-input-number v-model="temp.viewer"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -84,32 +86,17 @@
         <el-button v-else type="primary" @click="updateData">确 定</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { fetchList, createBanner, updateBanner, deleteBanner } from '@/api/banner'
+import { fetchList, fetchVideo, createVideo, updateVideo, deleteVideo } from '@/api/video'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
-
-// 页面跳转类型
-
-const gotype = [
-  { key: '1', display_name: '普通网页' },
-  { key: '2', display_name: '推荐单页面' },
-  { key: '3', display_name: '分析师页面' },
-  { key: '4', display_name: '课程列表页面' },
-  { key: '5', display_name: '课程购买页面' },
-  { key: '6', display_name: '视频列表页面' },
-  { key: '7', display_name: '会员升级页面' },
-  { key: '8', display_name: '绑定手机页面' },
-]
-
-const goTypeKeyValue = gotype.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
+import uploadVideo from '@/components/Upload/uploadVideo'
+import ElInputNumber from "../../../node_modules/element-ui/packages/input-number/src/input-number";
 
 export default {
   name: 'complexTable',
@@ -117,11 +104,10 @@ export default {
     waves
   },
   components:{
-    uploadImg
+    ElInputNumber, uploadImg, uploadVideo
   },
   data() {
     return {
-      gotype,
       tableKey: 0,
       list: null,
       total: null,
@@ -129,24 +115,20 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        cate_id: 1,
         importance: undefined,
         title: undefined,
         type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
-      // calendarTypeOptions,
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
-      showReviewer: false,
       temp: {
         id: undefined,
-        params: '',
-        page_id: 1,
         url: '',
-        sort: 1,
+        times: 88,
+        title: '',
+        viewer: '',
         status: 1,
-        img_url:''
+        img_url:  ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -157,11 +139,13 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [{ required: false, message: 'type is required', trigger: 'change' }],
+        type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: false, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
+      /* 复选框选中的列表,内容为选中的id */
+      checkList:[]
     }
   },
   filters: {
@@ -183,18 +167,23 @@ export default {
   methods: {
     // 上传图片的组件生成的图片
     uploadImg(url){
-        this.temp.img_url = url
+      this.temp.img_url = url
+    },
+    uploadVideo(url){
+      this.temp.url = url
     },
   	// 获得全部的列表
     getList() {
       this.listLoading = true
       this.listLoading = false
-       fetchList().then(response => {
+      this.listQuery.cate_id = this.$route.params.id
+      fetchList(this.listQuery).then(response => {
          this.list = response.data.list
          this.total = response.data.meta.total
          this.listLoading = false
-       })
+      })
     },
+
     // 页码过滤
     handleFilter() {
       this.listQuery.page = 1
@@ -215,24 +204,24 @@ export default {
 
     // 修改当前行的状态
     handleModifyStatus(row, status) {
-      deleteBanner( row ).then( res => {
-        this.getList();
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-      } )
+
+
+      this.$message({
+        message: '操作成功',
+        type: 'success'
+      })
+      row.status = status
     },
 
     resetTemp() {
       this.temp = {
         id: undefined,
-        params: '',
-        page_id: 1,
         url: '',
-        sort: 1,
+        times: '',
+        title: '',
+        viewer: '',
         status: 1,
-        img_url:''
+        img_url:  ''
       }
     },
 
@@ -245,11 +234,12 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+
     // 新增数据
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createBanner(this.temp).then(() => {
+          createVideo(this.temp).then(() => {
             this.getList();
             this.dialogFormVisible = false
             this.$notify({
@@ -265,19 +255,19 @@ export default {
 
     // 设置当前编辑窗口
     handleUpdate(row) {
-      this.temp = Object.assign({page_id:1}, row) // copy obj
+      this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
-  	// 更新数据
+
+  	// 模拟更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          updateBanner(tempData).then(() => {
+          updateVideo(this.temp).then(() => {
             this.getList();
             this.dialogFormVisible = false
             this.$notify({
@@ -290,16 +280,6 @@ export default {
         }
       })
     },
-    // 格式化Json
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    }
   }
 }
 </script>
@@ -312,5 +292,11 @@ export default {
   }
   img{
     width: 100%;
+  }
+  a{
+  	color: green;
+  	&:hover{
+		text-decoration: underline;
+  	}
   }
 </style>
