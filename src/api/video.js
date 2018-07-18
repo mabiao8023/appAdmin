@@ -83,7 +83,7 @@ export function getCateVideo(query) {
 
 export function addCateVideo(data) {
   return request({
-    url: '/admin/video_cate',
+    url: '/admin/video_cate/video',
     method: 'post',
     data: Qs.stringify(data)
   })
@@ -99,9 +99,8 @@ export function updateCateVideo(data) {
 
 export function deleteCateVideo(data) {
   return request({
-    url: '/admin/video_cate/delete',
+    url: '/admin/video_cate/video/delete',
     method: 'post',
     data: Qs.stringify(data)
   })
 }
-

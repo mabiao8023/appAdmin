@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户昵称" v-model="listQuery.title">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户昵称" v-model="listQuery.nickname">
       </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
     </div>
@@ -13,19 +13,19 @@
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="注册时间">
-        <template slot-scope="scope">
-          <span>{{scope.row.creat_time | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
-        </template>
-      </el-table-column>
       <el-table-column min-width="80px" label="昵称">
-       <template slot-scope="scope">
+        <template slot-scope="scope">
           <span>{{scope.row.nickname}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="60px" align="center" label="头像">
+      <el-table-column width="100px" align="center" label="头像">
         <template slot-scope="scope">
-          <span>{{scope.row.avatar}}</span>
+          <img :src="scope.row.avatar" style="width:60px;height:100px;border-radius:50%;">
+        </template>
+      </el-table-column>
+      <el-table-column width="150px" align="center" label="注册时间">
+        <template slot-scope="scope">
+          <span>{{scope.row.creat_time | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="电话">
@@ -36,20 +36,23 @@
       <el-table-column width="110px" align="center" label="会员等级">
         <template slot-scope="scope">
           <p>{{scope.row.level}}</p>
-          <p>{{scope.row.expired}} 后过期</p>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="球币">
         <template slot-scope="scope">
-          <span>{{scope.row.money}}</span>
+          <span>{{scope.row.money || 88}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="球票">
         <template slot-scope="scope">
-          <span>{{scope.row.jifen}}</span>
+          <span>{{scope.row.jifen || 199}}</span>
         </template>
       </el-table-column>
-
+      <el-table-column width="100px" align="center" label="是否可用">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '正常' : '冻结'}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList } from '@/api/userList'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -91,10 +94,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        nickname: ''
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
@@ -145,24 +145,11 @@ export default {
   methods: {
     getList() {
       this.listLoading = false;
-      this.list = [{
-          id:1,
-          nickname:'滴滴',
-          sex:'男',
-          avatar:'默认头像',
-          phone:'1782374832',
-          creat_time:'2018-5-18',
-          type:1,
-          level:'等级3',
-          expired:'180天',
-          money:'1888',
-          jifen:'8888',
-      }];
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+       fetchList(this.listQuery).then(response => {
+           this.list = response.data.list
+           this.total = response.data.meta.total
+           this.listLoading = false
+       })
     },
     handleFilter() {
       this.listQuery.page = 1

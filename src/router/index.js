@@ -83,6 +83,7 @@ export const asyncRouterMap = [
           // { path: 'advertising', component: _import('business/advertising'), name: '广告位配置', meta: { title: '广告位配置' }},
           { path: 'adList', component: _import('business/adList'), name: '广告列表', meta: { title: '广告列表' }},
           { path: 'push', component: _import('business/push'), name: '推送配置', meta: { title: '推送配置' }},
+          { path: 'systemNotice', component: _import('business/systemNotice'), name: '系统通知', meta: { title: '系统通知' }}
       ]
     },
     {
@@ -96,7 +97,7 @@ export const asyncRouterMap = [
       },
       children: [
         { path: 'best', component: _import('information/best'), name: '精推情报', meta: { title: '精推情报' }},
-        { path: 'list', component: _import('information/list'), name: '情报列表', meta: { title: '情报列表' }},
+        { path: 'list', component: _import('information/list'), name: '比赛列表', meta: { title: '比赛列表' }},
       ]
     },
     {
@@ -157,8 +158,9 @@ export const asyncRouterMap = [
       },
       children: [
         { path: 'videoCategory', component: _import('video/videoCategory'), name: '视频分类', meta: { title: '视频分类' }},
-        { path: 'videoList/:id', component: _import('video/videoList'), name: '视频列表', meta: { title: '视频列表' }},
-        { path: 'uploadVideoList', component: _import('video/uploadVideoList'), name: '上传视频', meta: { title: '上传视频' }},
+        { path: 'videoList/:id', component: _import('video/videoList'), name: '视频列表', meta: { title: '视频列表' }, hidden: true },
+        { path: 'videoCateList/:id', component: _import('video/videoCateList'), name: '分类视频列表', meta: { title: '分类视频列表' }, hidden: true },
+        { path: 'uploadVideoList', component: _import('video/uploadVideoList'), name: '上传视频', meta: { title: '上传视频' }}
       ]
     },
     {

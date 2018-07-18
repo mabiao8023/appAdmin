@@ -44,20 +44,20 @@
           <!--<span>{{ scope.row.order_no }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
-      <!--<el-table-column width="100px" align="center" label="是否添加">-->
-        <!--<template slot-scope="scope">-->
-          <!--<el-tag :type="scope.row.is_cate == 1 ? 'success' : 'danger'">{{scope.row.is_cate == 1 ? '已添加' : '未添加'}}</el-tag>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column width="100px" align="center" label="是否添加">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.is_cate == 1 ? 'success' : 'danger'">{{scope.row.is_cate == 1 ? '已添加' : '未添加'}}</el-tag>
+        </template>
+      </el-table-column>
 
-      <!--<el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">-->
-        <!--<template slot-scope="scope">-->
-          <!--&lt;!&ndash;<el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>&ndash;&gt;-->
-          <!--<el-button size="mini" :type="scope.row.is_cate ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.is_cate)">{{ scope.row.is_cate == 0 ? '添加' : '取消' }}-->
-          <!--</el-button>-->
-          <!--&lt;!&ndash;<el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>&ndash;&gt;-->
-        <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <!--<el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>-->
+          <el-button size="mini" :type="scope.row.is_cate ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.is_cate)">{{ scope.row.is_cate == 0 ? '添加' : '取消' }}
+          </el-button>
+          <!--<el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>-->
+        </template>
+      </el-table-column>
     </el-table>
 
     <div class="pagination-container">
@@ -238,7 +238,7 @@ export default {
       this.listLoading = true
       this.listLoading = false
       this.listQuery.cate_id = this.$route.params.id
-      getCateVideo(this.listQuery).then(response => {
+      fetchList(this.listQuery).then(response => {
          this.list = response.data.list
          this.total = response.data.meta.total
          this.listLoading = false

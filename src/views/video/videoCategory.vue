@@ -29,17 +29,22 @@
           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="视频列表" width="230px" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="已有视频" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" @click="gotoVideoList(scope.row)">视频列表</el-button>
+          <el-button type="primary" @click="gotoVideoList(scope.row)">已有视频</el-button>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="添加视频" width="230px" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="gotoCateVideoList(scope.row)">添加视频</el-button>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="操作" width="230px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
          <el-button size="mini" :type="scope.row.status ? 'danger' : ''" @click="handleModifyStatus(scope.row,!scope.row.status)">{{ scope.row.status == 1 ? '冻结' : '开启' }}
           </el-button>
-          <!--<el-button type="danger" size="mini" @click="handleUpdate(scope.row)">删除</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -221,7 +226,12 @@ export default {
         path: `/video/videoList/${row.id}`
       })
     },
-
+    //  跳转至视频列表页面
+    gotoCateVideoList(row){
+      this.$router.push({
+        path: `/video/videoCateList/${row.id}`
+      })
+    },
     // 设置当前编辑窗口
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj

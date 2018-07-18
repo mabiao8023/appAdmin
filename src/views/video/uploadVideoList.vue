@@ -31,7 +31,12 @@
           <span>{{ scope.row.viewer }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="上传时间" sortable>
+      <el-table-column width="150px" align="center" label="视频时长">
+        <template slot-scope="scope">
+          <span>{{ scope.row.times }}'</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="150px" align="center" label="上传时间">
         <template slot-scope="scope">
           <span>{{ scope.row.update_time }}</span>
         </template>
@@ -73,7 +78,7 @@
         <el-form-item label="视频链接" prop="url">
           <uploadVideo :imgUrl="temp.url" @input="uploadVideo"></uploadVideo>
         </el-form-item>
-        <el-form-item label="视频时长" prop="url">
+        <el-form-item label="视频时长" prop="times">
           <el-input-number v-model="temp.times"></el-input-number>
         </el-form-item>
         <el-form-item label="播放量" prop="viewer">
@@ -133,8 +138,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '编辑轮播图',
-        create: '新增轮播图'
+        update: '编辑',
+        create: '新增'
       },
       dialogPvVisible: false,
       pvData: [],

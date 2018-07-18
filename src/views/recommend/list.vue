@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/recommendMatch'
+import { fetchList, updateReStatus } from '@/api/recommendMatch'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -170,18 +170,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      // this.list = [{
-      //     id:1,
-      //     match_id:'23',
-      //     odd_id:'12424',
-      //     league_name:'联赛名称',
-      //     league_color:'联赛颜色',
-      //     home:'主队',
-      //     away:'客队',
-      //     match_time:'2018-08-12'
-      // }];
+
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.data.match_list
+        this.list = response.data.list
         this.leagueList = response.data.data.league_list
         this.total = response.data.data.meta.total
         this.listLoading = false
