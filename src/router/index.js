@@ -139,6 +139,7 @@ export const asyncRouterMap = [
         icon: 'money'
       },
       children: [
+        { path: 'orders', component: _import('trading/orders'), name: '订单信息', meta: { title: '订单信息' }},
         { path: 'recharge', component: _import('trading/recharge'), name: '充值记录', meta: { title: '充值记录' }},
         { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: '购买记录', meta: { title: '购买记录' }},
         { path: 'analystBilling', component: _import('trading/analystBilling'), name: '分析师发单记录', meta: { title: '分析师发单记录' }},

@@ -41,6 +41,8 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
+import { loginByUsername } from '@/api/myLogin'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 export default {
   components: { LangSelect, SocialSign },
@@ -63,7 +65,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '1111111'
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -86,11 +88,14 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: '/' })
-          }).catch(() => {
-            this.loading = false
+          loginByUsername(this.loginForm).then(res => {
+             this.loading = false
+              setToken(res.token)
+              this.$router.push({
+                  path: '/'
+              })
+          }).catch(e => {
+              this.loading = false
           })
         } else {
           console.log('error submit!!')

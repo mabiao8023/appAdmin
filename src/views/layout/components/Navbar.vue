@@ -48,6 +48,7 @@ import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import ThemePicker from '@/components/ThemePicker'
+import { removeToken } from '@/utils/auth'
 
 export default {
   components: {
@@ -69,9 +70,10 @@ export default {
       this.$store.dispatch('toggleSideBar')
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
-      })
+       removeToken()
+       this.$router.push({
+           path: '/'
+       })
     }
   }
 }
