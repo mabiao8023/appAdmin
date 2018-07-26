@@ -9,3 +9,19 @@ export function fetchList(query) {
     params: query
   })
 }
+export function creatAnalysts(data) {
+    return request({
+        url: '/admin/analyst',
+        method: 'post',
+        data: Qs.stringify(data)
+    })
+}
+
+export function editAnalysts(data) {
+    return request({
+        url: '/admin/analyst/update',
+        method: 'post',
+        data: Qs.stringify(data)
+    })
+}
+

@@ -1,82 +1,103 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户昵称" v-model="listQuery.title">
-      </el-input>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
-    </div>
+      <div class="filter-container">
+          <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">新增分析师</el-button>
+      </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="用户id" width="65">
+      <el-table-column align="center" label="分析师id" width="200">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="80px" label="昵称">
-       <template slot-scope="scope">
+        <el-table-column width="100px" align="center" label="头像">
+            <template slot-scope="scope">
+                <img :src="scope.row.avatar" style="width:60px;height:60px;border-radius:50%;">
+            </template>
+        </el-table-column>
+
+      <el-table-column width="150px" align="center" label="昵称">
+        <template slot-scope="scope">
           <span>{{scope.row.nickname}}</span>
         </template>
       </el-table-column>
-
-      <el-table-column width="60px" align="center" label="头像">
+      <el-table-column width="100px" align="center" label="标签">
         <template slot-scope="scope">
-          <span>{{scope.row.avatar}}</span>
+          <span>{{scope.row.tag}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" label="头衔">
+      <el-table-column width="auto" align="center" label="简介">
         <template slot-scope="scope">
-          <span>{{scope.row.job_title}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="150px" align="center" label="简介">
-        <template slot-scope="scope">
-          <span>{{scope.row.desc}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="110px" align="center" label="电话">
-        <template slot-scope="scope">
-          <span>{{scope.row.phone}}</span>
+          <span>{{scope.row.intro}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px" align="center" label="分析师等级">
         <template slot-scope="scope">
           <p>{{scope.row.level}}</p>
-          <p>{{scope.row.expired}}后过期</p>
         </template>
       </el-table-column>
-      <el-table-column width="110px" align="center" label="球币">
-        <template slot-scope="scope">
-          <span>{{scope.row.money}}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column width="110px" align="center" label="球币">-->
+        <!--<template slot-scope="scope">-->
+          <!--<span>{{scope.row.money}}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column width="110px" align="center" label="球票">
         <template slot-scope="scope">
-          <span>{{scope.row.jifen}}</span>
+          <span>{{scope.row.ticket}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="是否可用">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '正常' : '下架'}}</el-tag>
-        </template>
-      </el-table-column>
+      <!--<el-table-column width="150px" align="center" label="状态">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '正常' : '已冻结'}}</el-tag>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">发布
-          </el-button>
+          <!--<el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">冻结-->
+          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
+      <div class="pagination-container">
+          <el-pagination align="right" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          </el-pagination>
+      </div>
 
+      <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+          <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="140px" style='width: 400px; margin-left:50px;'>
+
+              <el-form-item label="昵称" prop="nickname">
+                  <el-input type="textarea"  placeholder="请输入昵称" v-model="temp.nickname"></el-input>
+              </el-form-item>
+              <el-form-item label="头像" prop="avatar">
+                  <uploadImg :imgUrl="temp.avatar" @input="uploadImg"></uploadImg>
+              </el-form-item>
+              <el-form-item label="标签" prop="tag">
+                  <el-input placeholder="请输入分析师标签"  v-model="temp.tag"></el-input>
+              </el-form-item>
+              <el-form-item label="简介" prop="intro">
+                  <el-input  placeholder="请输入分析师简介" v-model="temp.intro"></el-input>
+              </el-form-item>
+              <el-form-item label="球票数" prop="params">
+                  <el-input-number v-model="temp.ticket"></el-input-number>
+              </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+              <el-button v-else type="primary" @click="updateData">确 定</el-button>
+          </div>
+      </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/analysts'
+import { fetchList,creatAnalysts,editAnalysts } from '@/api/analysts'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
-
+import uploadImg from '@/components/Upload/uploadImg'
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
   { key: 'US', display_name: 'USA' },
@@ -94,6 +115,9 @@ export default {
   name: 'complexTable',
   directives: {
     waves
+  },
+  components:{
+      uploadImg,
   },
   data() {
     return {
@@ -116,12 +140,11 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        avatar: '',
+        nickname: '',
+        ticket: 0,
+        tag: '',
+        intro: '',
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -156,6 +179,10 @@ export default {
     this.getList()
   },
   methods: {
+      // 上传图片的组件生成的图片
+      uploadImg(url){
+          this.temp.avatar = url
+      },
     getList() {
         this.listLoading = false;
          fetchList(this.listQuery).then(response => {
@@ -185,13 +212,12 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+          id: undefined,
+          avatar: '',
+          nickname: '',
+          ticket: 0,
+          tag: '',
+          intro: '',
       }
     },
     handleCreate() {
@@ -205,10 +231,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
+            creatAnalysts(this.temp).then(() => {
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -222,7 +246,6 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -233,15 +256,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
+            editAnalysts(tempData).then(() => {
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
