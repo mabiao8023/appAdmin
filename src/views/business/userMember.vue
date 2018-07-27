@@ -4,46 +4,26 @@
   <div class="app-container calendar-list-container">
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="序号" width="65">
+      <el-table-column align="center" label="#id" width="65">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="等级称号">
+      <el-table-column width="150px" align="center" label="会员等级">
         <template slot-scope="scope">
-          <span>{{scope.row.title}}</span>
+          <span>等级{{scope.row.level}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" label="等级图标">
+      <el-table-column min-width="100px" align="center" label="会员时长">
         <template slot-scope="scope">
-          <img width="100%" :src="scope.row.icon">
+          <span>{{scope.row.month}}个月</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="100px" align="center" label="1月价格">
-        <template slot-scope="scope">
-          <span>{{scope.row.monthPrize}}元</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="100px" align="center" label="3月价格">
-        <template slot-scope="scope">
-          <span>{{scope.row.monthPrize}}元</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="100px" align="center" label="1年价格">
-        <template slot-scope="scope">
-          <span>{{scope.row.monthPrize}}元</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" align="center" label="免费查看单数">
-        <template slot-scope="scope">
-          <span>{{scope.row.freeNums}}单</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" align="center" label="课程购买折扣">
-        <template slot-scope="scope">
-          <span>{{scope.row.classDiscount}}折</span>
-        </template>
-      </el-table-column>
+        <el-table-column min-width="100px" align="center" label="会员价格">
+            <template slot-scope="scope">
+                <span>{{scope.row.price}}元</span>
+            </template>
+        </el-table-column>
       <el-table-column align="center" label="操作" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -58,26 +38,18 @@
 
     <el-dialog title="编辑用户会员特权" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="等级称号" prop="title">
-          <el-input v-model="temp.title"></el-input>
+        <el-form-item label="会员等级" prop="level">
+            <span>
+                会员等级{{temp.level}}
+            </span>
         </el-form-item>
-        <el-form-item label="等级图标" prop="icon">
-          <uploadImg :imgUrl="temp.icon" @input="uploadImg"></uploadImg>
+        <el-form-item label="会员时长" prop="month">
+            <span>
+                {{temp.month}}个月
+            </span>
         </el-form-item>
-        <el-form-item label="1月价格（元）" prop="monthPrize">
-          <el-input-number v-model="temp.monthPrize"></el-input-number>
-        </el-form-item>
-        <el-form-item label="3月价格（元）" prop="monthPrize">
-          <el-input-number v-model="temp.monthPrize"></el-input-number>
-        </el-form-item>
-        <el-form-item label="1年价格（元）" prop="monthPrize">
-          <el-input-number v-model="temp.monthPrize"></el-input-number>
-        </el-form-item>
-        <el-form-item label="免费查看单数（单）" prop="freeNums">
-          <el-input-number v-model="temp.freeNums"></el-input-number>
-        </el-form-item>
-        <el-form-item label="课程购买折扣（折）" prop="classDiscount">
-          <el-input-number v-model="temp.classDiscount"></el-input-number>
+        <el-form-item label="3月价格（元）" prop="price">
+          <el-input-number v-model="temp.price"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -101,7 +73,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList,updateUserMember  } from '@/api/userMember'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
@@ -148,12 +120,9 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        level: '',
+        month: '',
+        price: '0.01'
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -194,56 +163,11 @@ export default {
     },
     getList() {
       this.listLoading = true
-      this.list = [
-      	{
-      		id:1,
-      		title:'大众会员',
-          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
-      		monthPrize:0,
-      		yearPrize:0,
-      		freeNums:1,
-      		classDiscount:10,
-      	},{
-      		id:2,
-      		title:'黄金会员',
-          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
-      		monthPrize:88,
-      		yearPrize:1888,
-      		freeNums:3,
-      		classDiscount:9.5,
-      	},{
-			id:3,
-      		title:'铂金会员',
-          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
-      		monthPrize:188,
-      		yearPrize:2888,
-      		freeNums:6,
-      		classDiscount:9,
-      	},{
-			id:4,
-      		title:'钻石会员',
-          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
-      		monthPrize:288,
-      		yearPrize:3888,
-      		freeNums:10,
-      		classDiscount:8.5,
-      	},{
-			id:5,
-      		title:'至尊会员',
-          icon:'https://bpic.588ku.com/element_pic/16/11/24/b0ac4be1899c36a634973f9a0276e599.jpg!/fw/254/quality/90/unsharp/true/compress/true',
-      		monthPrize:388,
-      		yearPrize:4888,
-      		freeNums:15,
-      		classDiscount:8,
-      	}
-      ]
-      this.listLoading = false
-
-      // fetchList(this.listQuery).then(response => {
-      //   this.list = response.data.items
-      //   this.total = response.data.total
-      //   this.listLoading = false
-      // })
+       fetchList(this.listQuery).then(response => {
+         this.list = response.data.list
+         this.total = response.data.meta.total
+         this.listLoading = false
+       })
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -266,13 +190,10 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+          id: undefined,
+          level: '',
+          month: '',
+          price: '0.01'
       }
     },
     handleCreate() {
@@ -288,8 +209,8 @@ export default {
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
+            updateUserMember(this.temp).then(() => {
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -303,7 +224,6 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -314,15 +234,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
+            updateUserMember(tempData).then(() => {
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

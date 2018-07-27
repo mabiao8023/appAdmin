@@ -2,18 +2,16 @@ import request from '@/utils/request'
 import Qs from 'qs'
 export function fetchList(query) {
   return request({
-    url: '/admin/user_level',
+    url: '/admin/analyst_level',
     method: 'get',
     params: query
   })
 }
 
-export function updateUserMember(data) {
+export function updateAnalystMember(data) {
   return request({
-    url: '/admin/user_level/update',
+    url: '/admin/analyst_level/update',
     method: 'post',
     data: Qs.stringify(data)
   })
 }
-
-
