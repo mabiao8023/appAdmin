@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { fetchList,updateUserMember } from '@/api/analysts'
+import { fetchList,editAnalysts } from '@/api/analysts'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import uploadImg from '@/components/Upload/uploadImg'
