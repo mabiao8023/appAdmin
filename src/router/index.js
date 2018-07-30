@@ -43,17 +43,17 @@ export const constantRouterMap = [
       meta: { title: '图形数据', icon: 'dashboard', noCache: true }
     }]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    redirect: '/documentation/index',
-    children: [{
-      path: 'index',
-      component: _import('documentation/index'),
-      name: '操作文档',
-      meta: { title: '操作文档', icon: 'documentation', noCache: true }
-    }]
-  }
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   redirect: '/documentation/index',
+  //   children: [{
+  //     path: 'index',
+  //     component: _import('documentation/index'),
+  //     name: '操作文档',
+  //     meta: { title: '操作文档', icon: 'documentation', noCache: true }
+  //   }]
+  // }
 ]
 
 export default new Router({
@@ -100,20 +100,20 @@ export const asyncRouterMap = [
         { path: 'list', component: _import('information/list'), name: '比赛列表', meta: { title: '比赛列表' }},
       ]
     },
-    {
-      path: '/rank',
-      component: Layout,
-      redirect: 'noredirect',
-      name: '首页排行榜',
-      meta: {
-        title: '首页排行榜',
-        icon: 'icon'
-      },
-      children: [
-        { path: 'fengyun', component: _import('rank/fengyun'), name: '风云榜', meta: { title: '风云榜' }},
-        { path: 'mingzhong', component: _import('rank/mingzhong'), name: '命中榜', meta: { title: '命中榜' }},
-      ]
-    },
+    // {
+    //   path: '/rank',
+    //   component: Layout,
+    //   redirect: 'noredirect',
+    //   name: '首页排行榜',
+    //   meta: {
+    //     title: '首页排行榜',
+    //     icon: 'icon'
+    //   },
+    //   children: [
+    //     { path: 'fengyun', component: _import('rank/fengyun'), name: '风云榜', meta: { title: '风云榜' }},
+    //     { path: 'mingzhong', component: _import('rank/mingzhong'), name: '命中榜', meta: { title: '命中榜' }},
+    //   ]
+    // },
     {
       path: '/users',
       component: Layout,
@@ -139,10 +139,11 @@ export const asyncRouterMap = [
         icon: 'money'
       },
       children: [
+        { path: 'income', component: _import('trading/income'), name: '收入统计', meta: { title: '收入统计' }},
         { path: 'orders', component: _import('trading/orders'), name: '订单信息', meta: { title: '订单信息' }},
-        { path: 'recharge', component: _import('trading/recharge'), name: '充值记录', meta: { title: '充值记录' }},
-        { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: '购买记录', meta: { title: '购买记录' }},
-        { path: 'analystBilling', component: _import('trading/analystBilling'), name: '分析师发单记录', meta: { title: '分析师发单记录' }},
+        // { path: 'recharge', component: _import('trading/recharge'), name: '充值记录', meta: { title: '充值记录' }},
+        // { path: 'purchaseRecords', component: _import('trading/purchaseRecords'), name: '购买记录', meta: { title: '购买记录' }},
+        // { path: 'analystBilling', component: _import('trading/analystBilling'), name: '分析师发单记录', meta: { title: '分析师发单记录' }},
         // { path: 'analystShare', component: _import('trading/analystShare'), name: '分析师分成记录', meta: { title: '分析师分成记录' }},
         // { path: 'analystIntegration', component: _import('trading/analystIntegration'), name: '分析师积分记录', meta: { title: '分析师积分记录' }},
       ]
@@ -168,13 +169,14 @@ export const asyncRouterMap = [
       path: '/recommend',
       component: Layout,
       redirect: 'noredirect',
-      name: '推荐列表',
+      name: '赛事推荐',
       meta: {
-        title: '推荐列表',
+        title: '赛事推荐',
         icon: 'icon'
       },
       children: [
-        { path: 'list', component: _import('recommend/list'), name: '推荐列表', meta: { title: '推荐列表',icon: 'icon' }},
+        { path: 'matchList', component: _import('recommend/matchList'), name: '比赛列表', meta: { title: '比赛列表',icon: 'icon' }},
+        { path: 'recommendlist', component: _import('recommend/recommendList'), name: '推荐列表', meta: { title: '推荐列表',icon: 'icon' }},
       ]
     },
 

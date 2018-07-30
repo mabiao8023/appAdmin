@@ -57,12 +57,8 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.is_recommend == 0" type="success" @click="updateReStatus(scope.row)">添加精推情报
+          <el-button type="success" @click="updateReStatus(scope.row)">添加推荐方案
           </el-button>
-          <el-button v-else @click="updateReStatus(scope.row)">取消精推情报
-          </el-button>
-        <!--   <el-button  type="success" @click="handleModifyStatus(scope.row,'draft')">添加推荐
-          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -89,7 +85,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
   </div>
 </template>
 

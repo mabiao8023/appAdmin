@@ -1,36 +1,36 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.league_id" placeholder="联赛筛选">
+      <!-- <el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.league_id" placeholder="联赛筛选">
         <el-option v-for="item in leagueList" :key="item" :label="item.league_name" :value="item.id">
         </el-option>
-      </el-select>
-      <el-date-picker
+      </el-select> -->
+      <!-- <el-date-picker
         v-model="listQuery.date"
         align="right"
         type="date"
         placeholder="选择日期"
         value-format="yyyy-MM-dd"
       >
-      </el-date-picker>
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      </el-date-picker> -->
+ <!--      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button> -->
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" label="比赛id" width="165">
+      <el-table-column align="center" label="推荐id" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.match_id}}</span>
+          <span>{{scope.row.rec_id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="比赛日期" width="165">
+      <el-table-column align="center" label="比赛日期" width="100">
         <template slot-scope="scope">
-          <span>{{listQuery.date}}</span>
+          <span>{{scope.row.match_time}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="联赛" width="100">
         <template slot-scope="scope">
-          <span :style="{'color':scope.row.league_color}">{{scope.row.league_name}}</span>
+          <span>{{scope.row.league_name}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="主队" width="165">
@@ -43,8 +43,15 @@
           <span >{{scope.row.away}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="推荐赔率" width="265">
+        <template slot-scope="scope">
+         <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
+          <el-tag>{{scope.row.extra.current_handicap}}</el-tag>
+           <el-tag :type="scope.row.status == 1 ? 'success' : 'danger'">{{scope.row.status == 1 ? '可用' : '不可用'}}</el-tag>
+        </template>
+      </el-table-column>
 
-      <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
+     <!--  <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button v-if="scope.row.status!='published'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">发布
@@ -54,7 +61,7 @@
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">删除
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <div class="pagination-container">
@@ -84,7 +91,7 @@
 </template>
 
 <script>
-import { fetchList, updateReStatus } from '@/api/recommendMatch'
+import { fetchReList } from '@/api/matchRecommend'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -171,10 +178,10 @@ export default {
     getList() {
       this.listLoading = true;
 
-      fetchList(this.listQuery).then(response => {
+      fetchReList(this.listQuery).then(response => {
         this.list = response.data.list
-        this.leagueList = response.data.data.league_list
-        this.total = response.data.data.meta.total
+        // this.leagueList = response.data.data.league_list
+        this.total = response.data.meta.total
         this.listLoading = false
       })
     },
