@@ -2,7 +2,8 @@
 
 <template>
     <div class="app-container calendar-list-container">
-        <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+        <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit
+                  highlight-current-row
                   style="width: 100%">
             <el-table-column align="center" label="#id" width="65">
                 <template slot-scope="scope">
@@ -31,13 +32,14 @@
             </el-table-column>
         </el-table>
 
-        <!--  <div class="pagination-container">
+        <!-- <div class="pagination-container">
            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
            </el-pagination>
          </div> -->
 
         <el-dialog title="编辑用户会员特权" :visible.sync="dialogFormVisible">
-            <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
+            <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="150px"
+                     style='width: 400px; margin-left:50px;'>
                 <el-form-item label="会员等级" prop="level">
             <span>
                 会员等级{{temp.level}}
@@ -61,8 +63,8 @@
 
         <el-dialog title="Reading statistics" :visible.sync="dialogPvVisible">
             <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-                <el-table-column prop="key" label="Channel"> </el-table-column>
-                <el-table-column prop="pv" label="Pv"> </el-table-column>
+                <el-table-column prop="key" label="Channel"></el-table-column>
+                <el-table-column prop="pv" label="Pv"></el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">确 定</el-button>
@@ -73,16 +75,16 @@
 </template>
 
 <script>
-    import { fetchList,updateAnalystMember  } from '@/api/analystsMember'
+    import {fetchList, updateAnalystMember} from '@/api/analystsMember'
     import waves from '@/directive/waves' // 水波纹指令
-    import { parseTime } from '@/utils'
+    import {parseTime} from '@/utils'
     import uploadImg from '@/components/Upload/uploadImg'
 
     const calendarTypeOptions = [
-        { key: 'CN', display_name: 'China' },
-        { key: 'US', display_name: 'USA' },
-        { key: 'JP', display_name: 'Japan' },
-        { key: 'EU', display_name: 'Eurozone' }
+        {key: 'CN', display_name: 'China'},
+        {key: 'US', display_name: 'USA'},
+        {key: 'JP', display_name: 'Japan'},
+        {key: 'EU', display_name: 'Eurozone'}
     ]
 
     // arr to obj ,such as { CN : "China", US : "USA" }
@@ -96,7 +98,7 @@
         directives: {
             waves
         },
-        components:{
+        components: {
             uploadImg
         },
         data() {
@@ -115,7 +117,7 @@
                 },
                 importanceOptions: [1, 2, 3],
                 calendarTypeOptions,
-                sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+                sortOptions: [{label: 'ID Ascending', key: '+id'}, {label: 'ID Descending', key: '-id'}],
                 statusOptions: ['published', 'draft', 'deleted'],
                 showReviewer: false,
                 temp: {
@@ -133,9 +135,9 @@
                 dialogPvVisible: false,
                 pvData: [],
                 rules: {
-                    type: [{ required: false, message: 'type is required', trigger: 'change' }],
-                    timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-                    title: [{ required: false, message: 'title is required', trigger: 'blur' }]
+                    type: [{required: false, message: 'type is required', trigger: 'change'}],
+                    timestamp: [{type: 'date', required: true, message: 'timestamp is required', trigger: 'change'}],
+                    title: [{required: false, message: 'title is required', trigger: 'blur'}]
                 },
                 downloadLoading: false
             }

@@ -1,16 +1,20 @@
 <template>
     <div class="app-container calendar-list-container">
         <div class="filter-container">
-         <!--    <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="请输入订单号" v-model="order_id">
-            </el-input> -->
-            <el-select clearable style="width: 200px" class="filter-item" v-model="listQuery.payStatus" placeholder="请选择筛选类型">
+            <!--    <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="请输入订单号" v-model="order_id">
+               </el-input> -->
+            <el-select clearable style="width: 200px" class="filter-item" v-model="listQuery.payStatus"
+                       placeholder="请选择筛选类型">
                 <el-option v-for="item in payStatus" :key="item" :label="item" :value="item">
                 </el-option>
             </el-select>
-            <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
+            <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
+
+            </el-button>
         </div>
 
-        <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+        <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit
+                  highlight-current-row
                   style="width: 100%">
             <el-table-column align="center" label="统计日期" width="200">
                 <template slot-scope="scope">
@@ -49,24 +53,26 @@
                 </template>
             </el-table-column> -->
             <!--<el-table-column align="center" label="操作" width="200px" class-name="small-padding fixed-width">-->
-                <!--<template slot-scope="scope" v-if="scope.row.status == 0">-->
-                    <!--<el-button type="primary" size="mini" @click="handleUpdate(scope.row)">同意</el-button>-->
-                    <!--<el-button v-if="scope.row.status!='published'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'published')">拒绝-->
-          <!--</el-button>-->
-                <!--</template>-->
+            <!--<template slot-scope="scope" v-if="scope.row.status == 0">-->
+            <!--<el-button type="primary" size="mini" @click="handleUpdate(scope.row)">同意</el-button>-->
+            <!--<el-button v-if="scope.row.status!='published'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'published')">拒绝-->
+            <!--</el-button>-->
+            <!--</template>-->
             <!--</el-table-column>-->
         </el-table>
         <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit"
+                           layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
-    import { fetchList } from '@/api/income'
+    import {fetchList} from '@/api/income'
     import waves from '@/directive/waves' // 水波纹指令
-    import { parseTime } from '@/utils'
+    import {parseTime} from '@/utils'
 
     export default {
         name: 'complexTable',
@@ -87,7 +93,7 @@
                     start_date: '',
                     end_date: ''
                 },
-                payStatus: ['年','月','日','时'],
+                payStatus: ['年', '月', '日', '时'],
                 order_id: '',
                 temp: {
                     id: undefined,
@@ -114,14 +120,14 @@
             getList() {
                 this.listLoading = false;
                 this.order_id && (this.listQuery.order_id = this.order_id)
-                if(this.listQuery.payStatus == '年'){
+                if (this.listQuery.payStatus == '年') {
                     this.listQuery.format = 'year'
-                }else if(this.listQuery.payStatus == '月'){
-					this.listQuery.format = 'month'
-                }else if(this.listQuery.payStatus == '日'){
-					this.listQuery.format = 'day'
-                }else{
-                	this.listQuery.format = 'hour'
+                } else if (this.listQuery.payStatus == '月') {
+                    this.listQuery.format = 'month'
+                } else if (this.listQuery.payStatus == '日') {
+                    this.listQuery.format = 'day'
+                } else {
+                    this.listQuery.format = 'hour'
                 }
                 fetchList(this.listQuery).then(response => {
                     this.list = response.data.list
@@ -142,13 +148,13 @@
                 this.getList()
             },
             handleModifyStatus(row, status) {
-                refuseApplication( row ).then( res => {
+                refuseApplication(row).then(res => {
                     this.getList();
                     this.$message({
                         message: '已拒绝',
                         type: 'success'
                     })
-                } )
+                })
             },
             resetTemp() {
                 this.temp = {

@@ -24,14 +24,15 @@
         try {
             new Blob;
             return;
-        } catch (e) {}
+        } catch (e) {
+        }
     }
 
     // Internally we use a BlobBuilder implementation to base Blob off of
     // in order to support older browsers that only have BlobBuilder
-    var BlobBuilder = view.BlobBuilder || view.WebKitBlobBuilder || view.MozBlobBuilder || (function(view) {
+    var BlobBuilder = view.BlobBuilder || view.WebKitBlobBuilder || view.MozBlobBuilder || (function (view) {
             var
-                get_class = function(object) {
+                get_class = function (object) {
                     return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
                 }
                 , FakeBlobBuilder = function BlobBuilder() {
@@ -46,7 +47,7 @@
                 , FBB_proto = FakeBlobBuilder.prototype
                 , FB_proto = FakeBlob.prototype
                 , FileReaderSync = view.FileReaderSync
-                , FileException = function(type) {
+                , FileException = function (type) {
                     this.code = this[this.name = type];
                 }
                 , file_ex_codes = (
@@ -63,7 +64,7 @@
 
                 , ArrayBuffer = view.ArrayBuffer
                 , Uint8Array = view.Uint8Array
-                ;
+            ;
             FakeBlob.fake = FB_proto.fake = true;
             while (file_ex_code--) {
                 FileException.prototype[file_ex_codes[file_ex_code]] = file_ex_code + 1;
@@ -71,11 +72,11 @@
             if (!real_URL.createObjectURL) {
                 URL = view.URL = {};
             }
-            URL.createObjectURL = function(blob) {
+            URL.createObjectURL = function (blob) {
                 var
                     type = blob.type
                     , data_URI_header
-                    ;
+                ;
                 if (type === null) {
                     type = "application/octet-stream";
                 }
@@ -85,7 +86,8 @@
                         return data_URI_header + ";base64," + blob.data;
                     } else if (blob.encoding === "URI") {
                         return data_URI_header + "," + decodeURIComponent(blob.data);
-                    } if (btoa) {
+                    }
+                    if (btoa) {
                         return data_URI_header + ";base64," + btoa(blob.data);
                     } else {
                         return data_URI_header + "," + encodeURIComponent(blob.data);
@@ -94,12 +96,12 @@
                     return real_create_object_URL.call(real_URL, blob);
                 }
             };
-            URL.revokeObjectURL = function(object_URL) {
+            URL.revokeObjectURL = function (object_URL) {
                 if (object_URL.substring(0, 5) !== "data:" && real_revoke_object_URL) {
                     real_revoke_object_URL.call(real_URL, object_URL);
                 }
             };
-            FBB_proto.append = function(data/*, endings*/) {
+            FBB_proto.append = function (data/*, endings*/) {
                 var bb = this.data;
                 // decode data to a binary string
                 if (Uint8Array && (data instanceof ArrayBuffer || data instanceof Uint8Array)) {
@@ -108,7 +110,7 @@
                         , buf = new Uint8Array(data)
                         , i = 0
                         , buf_len = buf.length
-                        ;
+                    ;
                     for (; i < buf_len; i++) {
                         str += String.fromCharCode(buf[i]);
                     }
@@ -137,16 +139,16 @@
                     bb.push(unescape(encodeURIComponent(data)));
                 }
             };
-            FBB_proto.getBlob = function(type) {
+            FBB_proto.getBlob = function (type) {
                 if (!arguments.length) {
                     type = null;
                 }
                 return new FakeBlob(this.data.join(""), type, "raw");
             };
-            FBB_proto.toString = function() {
+            FBB_proto.toString = function () {
                 return "[object BlobBuilder]";
             };
-            FB_proto.slice = function(start, end, type) {
+            FB_proto.slice = function (start, end, type) {
                 var args = arguments.length;
                 if (args < 3) {
                     type = null;
@@ -157,10 +159,10 @@
                     , this.encoding
                 );
             };
-            FB_proto.toString = function() {
+            FB_proto.toString = function () {
                 return "[object Blob]";
             };
-            FB_proto.close = function() {
+            FB_proto.close = function () {
                 this.size = this.data.length = 0;
             };
             return FakeBlobBuilder;

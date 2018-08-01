@@ -20,20 +20,20 @@ import './mock' // simulation data
 import * as filters from './filters' // global filters
 
 Vue.use(Element, {
-  size: 'medium', // set element-ui default size
+    size: 'medium', // set element-ui default size
 })
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
-  Vue.filter(key, filters[key])
+    Vue.filter(key, filters[key])
 })
 
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: {App}
 })
