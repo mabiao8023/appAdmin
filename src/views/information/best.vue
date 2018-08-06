@@ -19,39 +19,39 @@
         <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit
                   highlight-current-row
                   style="width: 100%">
-            <el-table-column align="center" label="比赛id" width="85">
+            <el-table-column align="center" label="比赛id" width="185">
                 <template slot-scope="scope">
                     <span>{{scope.row.id}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="比赛日期" width="85">
+            <el-table-column align="center" label="比赛日期" width="285">
                 <template slot-scope="scope">
                     <span>{{scope.row.match_time}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="联赛" width="100">
+            <el-table-column align="center" label="联赛" width="200">
                 <template slot-scope="scope">
                     <span>{{scope.row.league_name}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="主队" width="65">
+            <el-table-column align="center" label="主队" width="165">
                 <template slot-scope="scope">
                     <span>{{scope.row.home}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="客队" width="65">
+            <el-table-column align="center" label="客队" width="165">
                 <template slot-scope="scope">
                     <span>{{scope.row.away}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="推荐方案" width="100">
-                <template slot-scope="scope">
-                    <el-button type="success" @click="updateReStatus(scope.row)">推荐方案(11)
+            <!--<el-table-column align="center" label="推荐方案" width="100">-->
+                <!--<template slot-scope="scope">-->
+                    <!--<el-button type="success" @click="updateReStatus(scope.row)">推荐方案(11)-->
 
 
-                    </el-button>
-                </template>
-            </el-table-column>
+                    <!--</el-button>-->
+                <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column align="center" label="操作" width="auto" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button @click="updateReStatus(scope.row)">取消精推情报

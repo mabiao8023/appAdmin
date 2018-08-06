@@ -35,13 +35,13 @@ export const constantRouterMap = [
     {
         path: '',
         component: Layout,
-        redirect: 'dashboard',
-        children: [{
-            path: 'dashboard',
-            component: _import('dashboard/index'),
-            name: '图形数据',
-            meta: {title: '图形数据', icon: 'dashboard', noCache: true}
-        }]
+        redirect: '/business/banner',
+        // children: [{
+        //     path: 'dashboard',
+        //     component: _import('dashboard/index'),
+        //     name: '图形数据',
+        //     meta: {title: '图形数据', icon: 'dashboard', noCache: true}
+        // }]
     },
     // {
     //   path: '/documentation',
@@ -74,6 +74,11 @@ export const asyncRouterMap = [
         },
         children: [
             // { path: 'system', component: _import('business/system'), name: '每日登录配置', meta: { title: '每日登录配置' }},
+
+            // {path: 'chargeConf', component: _import('business/chargeConf'), name: '用户充值配置', meta: {title: '用户充值配置'}},
+            // { path: 'entry', component: _import('business/entry'), name: '启动页配置', meta: { title: '启动页配置' }},
+            {path: 'banner', component: _import('business/banner'), name: '首页轮播图配置', meta: {title: '首页轮播图配置'}},
+            {path: 'marquee', component: _import('business/marquee'), name: '球稳头条配置', meta: {title: '球稳头条配置'}},
             {
                 path: 'userMember',
                 component: _import('business/userMember'),
@@ -86,13 +91,9 @@ export const asyncRouterMap = [
                 name: '分析师等级配置',
                 meta: {title: '分析师等级配置'}
             },
-            {path: 'chargeConf', component: _import('business/chargeConf'), name: '用户充值配置', meta: {title: '用户充值配置'}},
-            // { path: 'entry', component: _import('business/entry'), name: '启动页配置', meta: { title: '启动页配置' }},
-            {path: 'banner', component: _import('business/banner'), name: '首页轮播图配置', meta: {title: '首页轮播图配置'}},
-            {path: 'marquee', component: _import('business/marquee'), name: '球稳头条配置', meta: {title: '球稳头条配置'}},
             // { path: 'advertising', component: _import('business/advertising'), name: '广告位配置', meta: { title: '广告位配置' }},
             {path: 'adList', component: _import('business/adList'), name: '广告列表', meta: {title: '广告列表'}},
-            {path: 'push', component: _import('business/push'), name: '推送配置', meta: {title: '推送配置'}},
+            // {path: 'push', component: _import('business/push'), name: '推送配置', meta: {title: '推送配置'}},
             {path: 'systemNotice', component: _import('business/systemNotice'), name: '系统通知', meta: {title: '系统通知'}}
         ]
     },
@@ -202,25 +203,25 @@ export const asyncRouterMap = [
             icon: 'icon'
         },
         children: [
-            {
-                path: 'matchList',
-                component: _import('recommend/matchList'),
-                name: '比赛列表',
-                meta: {title: '比赛列表', icon: 'icon'}
-            },
+            // {
+            //     path: 'matchList',
+            //     component: _import('recommend/matchList'),
+            //     name: '比赛列表',
+            //     meta: {title: '比赛列表', icon: 'icon'}
+            // },
             {
                 path: 'recommendlist',
                 component: _import('recommend/recommendList'),
                 name: '推荐列表',
                 meta: {title: '推荐列表', icon: 'icon'}
             },
-            {
-                path: 'addRecommend/:id',
-                component: _import('recommend/addRecommend'),
-                name: '添加推荐',
-                meta: {title: '添加推荐', icon: 'icon'},
-                hidden: true
-            },
+            // {
+            //     path: 'addRecommend/:id',
+            //     component: _import('recommend/addRecommend'),
+            //     name: '添加推荐',
+            //     meta: {title: '添加推荐', icon: 'icon'},
+            //     hidden: true
+            // },
         ]
     },
 

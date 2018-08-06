@@ -1,11 +1,11 @@
 <template>
     <div class="app-container calendar-list-container">
         <div class="filter-container">
-            <el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.league_id"
-                       placeholder="联赛筛选">
-                <el-option v-for="item in leagueList" :key="item" :label="item.league_name" :value="item.id">
-                </el-option>
-            </el-select>
+            <!--<el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.league_id"-->
+                       <!--placeholder="联赛筛选">-->
+                <!--<el-option v-for="item in leagueList" :key="item" :label="item.league_name" :value="item.id">-->
+                <!--</el-option>-->
+            <!--</el-select>-->
             <el-date-picker
                 v-model="listQuery.date"
                 align="right"
@@ -22,39 +22,37 @@
         <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit
                   highlight-current-row
                   style="width: 100%">
-            <el-table-column align="center" label="比赛id" width="85">
+            <el-table-column align="center" label="比赛id" width="185">
                 <template slot-scope="scope">
                     <span>{{scope.row.id}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="比赛日期" width="85">
+            <el-table-column align="center" label="比赛日期" width="285">
                 <template slot-scope="scope">
                     <span>{{scope.row.match_time}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="联赛" width="100">
+            <el-table-column align="center" label="联赛" width="200">
                 <template slot-scope="scope">
                     <span>{{scope.row.league_name}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="主队" width="65">
+            <el-table-column align="center" label="主队" width="165">
                 <template slot-scope="scope">
                     <span>{{scope.row.home}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="客队" width="65">
+            <el-table-column align="center" label="客队" width="165">
                 <template slot-scope="scope">
                     <span>{{scope.row.away}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="推荐方案" width="200">
-                <template slot-scope="scope">
-                    <el-button type="success" @click="updateReStatus(scope.row)">推荐方案(11)
-
-
-                    </el-button>
-                </template>
-            </el-table-column>
+            <!--<el-table-column align="center" label="推荐方案" width="200">-->
+                <!--<template slot-scope="scope">-->
+                    <!--<el-button type="success" @click="updateReStatus(scope.row)">推荐方案(11)-->
+                    <!--</el-button>-->
+                <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column width="150px" align="center" label="是否为精推情报">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.is_recommend == 1" type="success">精推情报</el-tag>
