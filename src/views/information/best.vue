@@ -58,10 +58,10 @@
 
 
                     </el-button>
-                    <el-button type="success" @click="handleModifyStatus(scope.row,'draft')">添加推荐
+                <!--     <el-button type="success" @click="handleModifyStatus(scope.row,'draft')">添加推荐
 
 
-                    </el-button>
+                    </el-button> -->
                 </template>
             </el-table-column>
         </el-table>

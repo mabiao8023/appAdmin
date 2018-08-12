@@ -91,6 +91,12 @@ export const asyncRouterMap = [
                 name: '分析师等级配置',
                 meta: {title: '分析师等级配置'}
             },
+            {
+                path: 'level',
+                component: _import('business/level'),
+                name: '等级特权配置',
+                meta: {title: '等级特权配置'}
+            },
             // { path: 'advertising', component: _import('business/advertising'), name: '广告位配置', meta: { title: '广告位配置' }},
             {path: 'adList', component: _import('business/adList'), name: '广告列表', meta: {title: '广告列表'}},
             // {path: 'push', component: _import('business/push'), name: '推送配置', meta: {title: '推送配置'}},
