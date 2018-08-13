@@ -30,6 +30,11 @@
                     <span>{{scope.row.num}}</span>
                 </template>
             </el-table-column>
+            <el-table-column min-width="200px" align="left" label="特权文案描述">
+                <template slot-scope="scope">
+                    <span v-html="scope.row.intro.replace(/(\r\n)|\n/g,'<br/>')"></span>
+                </template>
+            </el-table-column>
             <el-table-column align="center" label="操作" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -57,6 +62,9 @@
                 </el-form-item>
                 <el-form-item label="免费查看(发推荐)单数" prop="price">
                     <el-input-number v-model="temp.num"></el-input-number>
+                </el-form-item>
+                <el-form-item label="特权描述" prop="price">
+                    <el-input type="textarea" v-model="temp.intro"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
